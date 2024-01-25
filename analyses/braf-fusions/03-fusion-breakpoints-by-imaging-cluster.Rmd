@@ -30,7 +30,7 @@ plot_dir <- file.path(analysis_dir, "plots")
 Set file paths
 
 ```{r}
-fusion_file <- file.path(results_dir, "braf-fusions-exon-annotation.tsv")
+fusion_file <- file.path(results_dir, "braf-fusion-breakpoints-by-patient.tsv")
 hist_file <- file.path(data_dir, "histologies.tsv")
 cluster_file <- file.path(input_dir, "20231003_merged_imaging_clustering_risk_stratification.xlsx")
 fusion_dgd_file <- file.path(data_dir, "fusion-dgd.tsv.gz")
@@ -43,6 +43,11 @@ Load subtype and imaging cluster data
 hist <- read_tsv(hist_file, guess_max = 100000) %>%
   filter(!is.na(pathology_diagnosis),
          composition != "Derived Cell Line")
+
+# fusion file
+break_df <- read_tsv(fusion_file) %>%
+  left_join(unique(hist[,c("cohort_participant_id", "Kids_First_Participant_ID")])) %>%
+  select(-Kids_First_Participant_ID)
 
 # imaging cluster data
 image_clusters <- readxl::read_excel(cluster_file) %>%
@@ -75,110 +80,20 @@ earliest_age_subtypes <- image_clusters %>%
   dplyr::mutate(event_id_match = if_else(sapply(strsplit(earliest_events, ";"), function(x) event_id_original %in% x), "yes", "no"))
 ```
 
-Filter fusion file for inframe, duplications, kinase domain retained, tier 1/2
-
-```{r filter fusion file}
-# filter fusion file for in-frame fusions and duplications, and determine whether BRAF kinase domain is retained
-braf_fusions <- read_tsv(fusion_file) %>%
-  left_join(unique(hist[,c("Kids_First_Participant_ID", "cohort_participant_id")])) %>%
-  dplyr::filter(Fusion_Type == "in-frame",
-         grepl("duplication", annots)) %>%
-  mutate(keep = case_when(FusionName == "KIAA1549--BRAF" & DomainRetainedGene1B == "Yes" ~ "yes",
-                          FusionName == "BRAF--KIAA1549" & DomainRetainedGene1A == "Yes" ~ "yes",
-                          TRUE ~ "no")) %>%
-  # The below sample has two different common breakpoints and one is low conf in arriba, so we will remove that one
-  mutate(keep = case_when(Sample == "BS_SDZY6RZ3" & LeftBreakpoint_position == 138867975 ~ "no",
-                            TRUE ~ keep))
-
-braf_fusions_dgd <- read_tsv(fusion_dgd_file) %>%
-  dplyr::filter(FusionName == "KIAA1549--BRAF" & !grepl("Tier 3|Tier 4", variant_tier)) %>%
-  dplyr::rename(Kids_First_Biospecimen_ID = Sample) %>%
-  left_join(hist[,c("Kids_First_Biospecimen_ID", "cohort_participant_id")]) %>%
-  dplyr::select(cohort_participant_id, FusionName, `5_prime_region`, `3_prime_region`) %>%
-  dplyr::mutate(`5_prime_region` = gsub("^Exon |^exon ", "", `5_prime_region`),
-         `3_prime_region` = gsub("^Exon |^exon ", "", `3_prime_region`),                        
-         breakpoint_exons = paste(`5_prime_region`, `3_prime_region`, sep = ":"),
-         breakpoint_type = case_when(breakpoint_exons %in% c("16:9", "15:9", "16:11", "18:10") ~ "common",
-                                     TRUE ~ "rare/novel"),
-         keep = "yes") %>%
-  unique()
-```
-
-Consolidate all common and rare exon breakpoints per patient
-
-```{r}
-common_fusions_pbta <- braf_fusions %>%
-  dplyr::filter(breakpoint_exons %in% c("16:9", "15:9", "16:11", "18:10") & keep == "yes") %>%
-  distinct(cohort_participant_id, breakpoint_exons, .keep_all = T) %>%
-  group_by(cohort_participant_id) %>%
-  summarise(breakpoint_exons_common = str_c(breakpoint_exons, collapse = ";")) %>%
-  unique()
-
-common_fusions <- braf_fusions_dgd %>%
-  dplyr::filter(breakpoint_exons %in% c("16:9", "15:9", "16:11", "18:10") & keep == "yes") %>%
-  distinct(cohort_participant_id, breakpoint_exons, .keep_all = T) %>%
-  group_by(cohort_participant_id) %>%
-  summarise(breakpoint_exons_common = str_c(breakpoint_exons, collapse = ";")) %>%
-  bind_rows(common_fusions_pbta) %>%
-  distinct(cohort_participant_id, breakpoint_exons_common, .keep_all = T) %>%
-  group_by(cohort_participant_id) %>%
-  summarise(breakpoint_exons_common = str_c(breakpoint_exons_common, collapse = ";")) %>%
-  unique()
-  
-
-rare_novel_fusions_pbta <- braf_fusions %>%
-  dplyr::filter(!breakpoint_exons %in% c("16:9", "15:9", "16:11", "18:10") & keep == "yes") %>%
-  distinct(cohort_participant_id, breakpoint_exons, .keep_all = T) %>%
-  group_by(cohort_participant_id) %>%
-  summarise(breakpoint_exons_rare = str_c(breakpoint_exons, collapse = ";")) %>%
-  unique()
-
-rare_novel_fusions <- braf_fusions_dgd %>%
-  dplyr::filter(!breakpoint_exons %in% c("16:9", "15:9", "16:11", "18:10") & keep == "yes") %>%
-  distinct(cohort_participant_id, breakpoint_exons, .keep_all = T) %>%
-  group_by(cohort_participant_id) %>%
-  summarise(breakpoint_exons_rare = str_c(breakpoint_exons, collapse = ";")) %>%
-  bind_rows(rare_novel_fusions_pbta) %>%
-  distinct(cohort_participant_id, breakpoint_exons_rare, .keep_all = T) %>%
-  group_by(cohort_participant_id) %>%
-  summarise(breakpoint_exons_rare = str_c(breakpoint_exons_rare, collapse = ";")) %>%
-  unique()
-
-```
-
-Merge breakpoint data to braf hist
+Merge breakpoint data to hist
 
 ```{r}
 imaging_plus_fusions <- earliest_age_subtypes %>%
-  left_join(common_fusions) %>%
-  left_join(rare_novel_fusions)
+  left_join(break_df)
 ```
 
 Add breakpoint_type column (common vs rare) and breakpoint_group column (common breakpoint type and rare merged)
 
 ```{r}
 imaging_plus_fusions <- imaging_plus_fusions %>%
-  dplyr::mutate(breakpoint_type = case_when(
-    !is.na(breakpoint_exons_common) & !is.na(breakpoint_exons_rare) ~ NA_character_,
-    !is.na(breakpoint_exons_rare) ~ "rare",
-    !is.na(breakpoint_exons_common) ~ "common",
-    TRUE ~ NA_character_
-  )) %>%
-  # Assign breakpoint group (unique common breakpoint or broad rare group)
-  dplyr::mutate(breakpoint_group = case_when(
-    !is.na(breakpoint_exons_common) & !is.na(breakpoint_exons_rare) ~ NA_character_,
-    breakpoint_exons_common == "16:9" ~ "16:9",
-    breakpoint_exons_common == "15:9" ~ "15:9",
-    breakpoint_exons_common == "16:11" ~ "16:11",
-    breakpoint_exons_common == "18:10" ~ "18:10",
-    !is.na(breakpoint_exons_rare) ~ "rare",
-    TRUE ~ NA_character_
-  )) %>%
-  dplyr::mutate(breakpoint_group = fct_relevel(breakpoint_group,
-                                               c("18:10", "16:9", "15:9", "16:11", "rare")
-                                               ),
   # if NA subtype and there is a breakpoint, add KIAA1549--BRAF:
-              molecular_subtype = case_when(is.na(molecular_subtype) & !is.na(breakpoint_type) ~ "KIAA1549-BRAF", TRUE ~ molecular_subtype)) %>%
+  dplyr::mutate(molecular_subtype = case_when(is.na(molecular_subtype) & !is.na(breakpoint_type) ~ "KIAA1549-BRAF",
+                                              TRUE ~ molecular_subtype)) %>%
   # update col order
   select(cohort_participant_id, age_at_imaging_days, age_at_diagnosis_days_original, age_at_diagnosis_collapse, age_dx_match, event_id_original, earliest_events, event_id_match, Cohort, `Distance to 0`, `Distance to 1`, `Distance to 2`, `Cluster Assignment`, molecular_subtype, starts_with("breakpoint")) %>%
   write_tsv(file.path(results_dir, "imaging_clusters_plus_subtypes_breakpoints.tsv"))
@@ -195,7 +110,7 @@ imaging_plus_fusions %>%
 
 ## Subtypes type by cluster
 
-What is the distribution of type of breakpoints by cluster? 
+What is the distribution of type of molecular subtypes by cluster? 
 
 ```{r}
 table(imaging_plus_fusions$molecular_subtype, imaging_plus_fusions$`Cluster Assignment`)
@@ -215,7 +130,7 @@ type_df <- imaging_plus_fusions %>%
   filter(!is.na(breakpoint_type)) %>%
   group_by(breakpoint_type, `Cluster Assignment`) %>%
   summarise(count = n()) %>%
-  group_by(`Cluster Assignment`) %>%
+  group_by(breakpoint_type) %>%
   mutate(total_count = sum(count),
          percentage = round(count / total_count * 100, 1)) %>%
   dplyr::mutate(ct_perc = glue::glue("{count} ({percentage}%)")) %>%
@@ -226,6 +141,7 @@ type_df <- type_df %>%
   mutate(
     p = map_dbl(breakpoint_type, ~round(fisher.test(table(grepl(.x, imaging_plus_fusions$breakpoint_type), imaging_plus_fusions$`Cluster Assignment`))$p.value, 10))
   )
+type_df
 
 write_tsv(type_df, 
           file.path(results_dir, "lgg-braf-fusion-common-breakpoint-type-image-clusters.tsv"))
@@ -250,10 +166,8 @@ table(imaging_plus_fusions$breakpoint_exons_common, imaging_plus_fusions$`Cluste
 Calculate fusion breakpoint frequency by predicted ancestry and Fisher's exact test p-value 
 
 ```{r}
-common_breakpoints <- c("16:9", "15:9", "16:11", "18:10")
-
 common_df <- imaging_plus_fusions %>%
-  dplyr::filter(breakpoint_exons_common %in% common_breakpoints) %>%
+  dplyr::filter(!is.na(breakpoint_exons_common)) %>%
   group_by(breakpoint_exons_common, `Cluster Assignment`) %>%
   summarise(count = n()) %>%
   group_by(`Cluster Assignment`) %>%
@@ -267,6 +181,8 @@ common_df <- common_df %>%
   mutate(
     p = map_dbl(breakpoint_exons_common, ~round(fisher.test(table(grepl(.x, imaging_plus_fusions$breakpoint_exons_common), imaging_plus_fusions$`Cluster Assignment`))$p.value, 10))
   )
+
+common_df
 
 write_tsv(common_df, 
           file.path(results_dir, "lgg-braf-fusion-common-breakpoint-freq-image-clusters.tsv"))
