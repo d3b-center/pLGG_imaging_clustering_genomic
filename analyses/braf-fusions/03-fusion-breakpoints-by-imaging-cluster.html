@@ -629,7 +629,12 @@ column (common breakpoint type and rare merged)</p>
   )) %&gt;%
   dplyr::mutate(breakpoint_group = fct_relevel(breakpoint_group,
                                                c(&quot;18:10&quot;, &quot;16:9&quot;, &quot;15:9&quot;, &quot;16:11&quot;, &quot;rare&quot;)
-                                               ))</code></pre>
+                                               ),
+  # if NA subtype and there is a breakpoint, add KIAA1549--BRAF:
+              molecular_subtype = case_when(is.na(molecular_subtype) &amp; !is.na(breakpoint_type) ~ &quot;KIAA1549-BRAF&quot;, TRUE ~ molecular_subtype)) %&gt;%
+  # update col order
+  select(cohort_participant_id, age_at_imaging_days, age_at_diagnosis_days_original, age_at_diagnosis_collapse, age_dx_match, event_id_original, earliest_events, event_id_match, Cohort, `Distance to 0`, `Distance to 1`, `Distance to 2`, `Cluster Assignment`, molecular_subtype, starts_with(&quot;breakpoint&quot;)) %&gt;%
+  write_tsv(file.path(results_dir, &quot;imaging_clusters_plus_subtypes_breakpoints.tsv&quot;))</code></pre>
 <pre><code>## Warning: There were 201 warnings in `dplyr::mutate()`.
 ## The first warning was:
 ## ℹ In argument: `breakpoint_group = fct_relevel(...)`.
@@ -654,7 +659,7 @@ column (common breakpoint type and rare merged)</p>
 ##   FGFR                       0  1  1
 ##   FGFR, NF1-somatic          0  0  1
 ##   IDH                        0  1  1
-##   KIAA1549-BRAF             54 12 23
+##   KIAA1549-BRAF             55 12 25
 ##   KIAA1549-BRAF, BRAF V600E  1  0  0
 ##   KIAA1549-BRAF, RTK         1  1  0
 ##   MAPK                       0  1  1

@@ -176,10 +176,12 @@ imaging_plus_fusions <- imaging_plus_fusions %>%
   )) %>%
   dplyr::mutate(breakpoint_group = fct_relevel(breakpoint_group,
                                                c("18:10", "16:9", "15:9", "16:11", "rare")
-                                               ))
-
-
-
+                                               ),
+  # if NA subtype and there is a breakpoint, add KIAA1549--BRAF:
+              molecular_subtype = case_when(is.na(molecular_subtype) & !is.na(breakpoint_type) ~ "KIAA1549-BRAF", TRUE ~ molecular_subtype)) %>%
+  # update col order
+  select(cohort_participant_id, age_at_imaging_days, age_at_diagnosis_days_original, age_at_diagnosis_collapse, age_dx_match, event_id_original, earliest_events, event_id_match, Cohort, `Distance to 0`, `Distance to 1`, `Distance to 2`, `Cluster Assignment`, molecular_subtype, starts_with("breakpoint")) %>%
+  write_tsv(file.path(results_dir, "imaging_clusters_plus_subtypes_breakpoints.tsv"))
 ```
 
 
