@@ -170,7 +170,7 @@ common_df <- imaging_plus_fusions %>%
   dplyr::filter(!is.na(breakpoint_exons_common)) %>%
   group_by(breakpoint_exons_common, `Cluster Assignment`) %>%
   summarise(count = n()) %>%
-  group_by(`Cluster Assignment`) %>%
+  group_by(breakpoint_exons_common) %>%
   mutate(total_count = sum(count),
          percentage = round(count / total_count * 100, 1)) %>%
   dplyr::mutate(ct_perc = glue::glue("{count} ({percentage}%)")) %>%
