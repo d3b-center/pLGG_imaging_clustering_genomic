@@ -1,6 +1,6 @@
-# D3b Bixu Repository Template
+# D3b TIRU Radiomic Analysis Repository
 
-Use this template to bootstrap a new D3b bixu repository 
+This repository includes codes relevant to each radiomic analysis project.  
 
 ### Badges
 
