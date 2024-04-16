@@ -1,0 +1,204 @@
+---
+title: 'Assess BRAF fusion breakpoints in PBTA ancestry cohort'
+output: 
+  html_document:
+  toc: TRUE
+toc_float: TRUE
+author: Jo Lynne Rokita
+date: "2024"
+---
+
+This script calculates frequency of BRAF fusion breakpoint types by predicted ancestry in pLGG, BRAF fusion subtype patients in the PBTA ancestry cohort 
+  
+Load libraries and set directories
+  
+```{r load libraries and set directories}
+library(data.table)
+library(tidyverse)
+library(readxl)
+
+root_dir <- rprojroot::find_root(rprojroot::has_dir(".git"))
+
+data_dir <- file.path(root_dir, "data")
+analysis_dir <- file.path(root_dir, "analyses", "braf-fusions")
+results_dir <- file.path(analysis_dir, "results")
+input_dir <- file.path(analysis_dir, "input")
+plot_dir <- file.path(analysis_dir, "plots")
+
+```
+
+Set file paths
+
+```{r}
+fusion_file <- file.path(results_dir, "braf-fusion-breakpoints-by-patient.tsv")
+hist_file <- file.path(data_dir, "histologies.tsv")
+cluster_file <- file.path(input_dir, "20231003_merged_imaging_clustering_risk_stratification.xlsx")
+fusion_dgd_file <- file.path(data_dir, "fusion-dgd.tsv.gz")
+```
+
+Load subtype and imaging cluster data
+
+```{r load imaging data and append proper events and subtypes}
+# histology file - remove normals and derived cell lines
+hist <- read_tsv(hist_file, guess_max = 100000) %>%
+  filter(!is.na(pathology_diagnosis),
+         composition != "Derived Cell Line")
+
+# fusion file
+break_df <- read_tsv(fusion_file) %>%
+  left_join(unique(hist[,c("cohort_participant_id", "Kids_First_Participant_ID")])) %>%
+  select(-Kids_First_Participant_ID)
+
+# imaging cluster data
+image_clusters <- readxl::read_excel(cluster_file) %>%
+    dplyr::rename(cohort_participant_id = SubjectID,
+                age_at_diagnosis_days_original = age_at_event_days.1_y,
+                event_id_original = cbtn_specimen_group_id_x,
+                age_at_imaging_days = Days_at_Imaging_y) %>%
+  # update cluster assignments
+  dplyr::mutate(`Cluster Assignment` = case_when(`Cluster Assignment` == 0 ~ 1,
+                                                 `Cluster Assignment` == 1 ~ 2,
+                                                 `Cluster Assignment` == 2 ~ 3))
+
+# choose earliest age for the sample subtype to utilize since imaging is taken closes to diagnosis
+earliest_age_subtypes <- image_clusters %>%
+  select(cohort_participant_id, age_at_imaging_days, age_at_diagnosis_days_original, event_id_original) %>%
+  left_join(unique(hist[,c("cohort_participant_id", "sample_id", "molecular_subtype", "age_at_diagnosis_days", "age_at_event_days")]), by = c("cohort_participant_id")) %>%
+  group_by(cohort_participant_id) %>%
+  # select earliest event
+  summarise(age_at_event_days = min(age_at_event_days)) %>%
+  left_join(unique(hist[,c("cohort_participant_id", "sample_id", "molecular_subtype", "age_at_diagnosis_days", "age_at_event_days")]), by = c("cohort_participant_id", "age_at_event_days")) %>%
+  dplyr::mutate(molecular_subtype = gsub("^LGG, |^GNG, |^SEGA, ", "", molecular_subtype)) %>%  group_by(cohort_participant_id) %>%
+  # collapse events, update molecular subtypes
+  summarise(age_at_diagnosis_collapse = str_c(unique(age_at_diagnosis_days), collapse = ";"),
+            earliest_events = str_c(unique(sample_id), collapse = ";"),
+            molecular_subtype = str_c(unique(molecular_subtype), collapse = ";")) %>%
+  mutate(molecular_subtype = case_when(grepl("HGG|;To be|, wildtype|To be classified;|wildtype;", molecular_subtype) ~ gsub(";To be classified|; wildtype|To be classified;|wildtype; |HGG, To be classified;", "", molecular_subtype), TRUE ~ molecular_subtype)) %>%
+  full_join(image_clusters) %>%
+  dplyr::mutate(age_dx_match = ifelse(age_at_diagnosis_days_original == age_at_diagnosis_collapse, "yes", "no")) %>%
+  rowwise() %>%
+  dplyr::mutate(event_id_match = if_else(sapply(strsplit(earliest_events, ";"), function(x) event_id_original %in% x), "yes", "no"))
+```
+
+Merge breakpoint data to hist
+
+```{r}
+imaging_plus_fusions <- earliest_age_subtypes %>%
+  left_join(break_df)
+```
+
+Add breakpoint_type column (common vs rare) and breakpoint_group column (common breakpoint type and rare merged)
+
+```{r}
+imaging_plus_fusions <- imaging_plus_fusions %>%
+  # if NA subtype and there is a breakpoint, add KIAA1549--BRAF:
+  dplyr::mutate(molecular_subtype = case_when(is.na(molecular_subtype) & !is.na(breakpoint_type) ~ "KIAA1549-BRAF",
+                                              TRUE ~ molecular_subtype)) %>%
+  # update col order
+  select(cohort_participant_id, age_at_imaging_days, age_at_diagnosis_days_original, age_at_diagnosis_collapse, age_dx_match, event_id_original, earliest_events, event_id_match, Cohort, `Distance to 0`, `Distance to 1`, `Distance to 2`, `Cluster Assignment`, molecular_subtype, starts_with("breakpoint")) %>%
+  write_tsv(file.path(results_dir, "imaging_clusters_plus_subtypes_breakpoints.tsv"))
+```
+
+
+How many patients do we have breakpoint data for? 
+
+```{r}
+imaging_plus_fusions %>%
+  filter(!is.na(breakpoint_type)) %>%
+  nrow()
+```
+
+## Subtypes type by cluster
+
+What is the distribution of type of molecular subtypes by cluster? 
+
+```{r}
+table(imaging_plus_fusions$molecular_subtype, imaging_plus_fusions$`Cluster Assignment`)
+```
+
+
+## Breakpoint type by cluster
+
+What is the distribution of type of breakpoints by cluster? 
+
+```{r}
+table(imaging_plus_fusions$breakpoint_type, imaging_plus_fusions$`Cluster Assignment`)
+```
+
+```{r stats on common vs rare}
+type_df <- imaging_plus_fusions %>%
+  filter(!is.na(breakpoint_type)) %>%
+  group_by(breakpoint_type, `Cluster Assignment`) %>%
+  summarise(count = n()) %>%
+  group_by(breakpoint_type) %>%
+  mutate(total_count = sum(count),
+         percentage = round(count / total_count * 100, 1)) %>%
+  dplyr::mutate(ct_perc = glue::glue("{count} ({percentage}%)")) %>%
+  dplyr::select(breakpoint_type, `Cluster Assignment`, ct_perc) %>%
+  spread(`Cluster Assignment`, ct_perc, fill = 0)
+
+type_df <- type_df %>%
+  mutate(
+    p = map_dbl(breakpoint_type, ~round(fisher.test(table(grepl(.x, imaging_plus_fusions$breakpoint_type), imaging_plus_fusions$`Cluster Assignment`))$p.value, 10))
+  )
+type_df
+
+write_tsv(type_df, 
+          file.path(results_dir, "lgg-braf-fusion-common-breakpoint-type-image-clusters.tsv"))
+
+```
+
+
+Assess distribution of breakpoint type by imaging cluster (common vs. rare)
+
+```{r}
+fisher.test(table(imaging_plus_fusions$breakpoint_type, imaging_plus_fusions$`Cluster Assignment`))
+```
+
+## Common breakpoint summary
+
+What is the distribution of common breakpoints by cluster? 
+
+```{r}
+table(imaging_plus_fusions$breakpoint_exons_common, imaging_plus_fusions$`Cluster Assignment`)
+```
+
+Calculate fusion breakpoint frequency by predicted ancestry and Fisher's exact test p-value 
+
+```{r}
+common_df <- imaging_plus_fusions %>%
+  dplyr::filter(!is.na(breakpoint_exons_common)) %>%
+  group_by(breakpoint_exons_common, `Cluster Assignment`) %>%
+  summarise(count = n()) %>%
+  group_by(breakpoint_exons_common) %>%
+  mutate(total_count = sum(count),
+         percentage = round(count / total_count * 100, 1)) %>%
+  dplyr::mutate(ct_perc = glue::glue("{count} ({percentage}%)")) %>%
+  dplyr::select(breakpoint_exons_common, `Cluster Assignment`, ct_perc) %>%
+  spread(`Cluster Assignment`, ct_perc, fill = 0)
+
+common_df <- common_df %>%
+  mutate(
+    p = map_dbl(breakpoint_exons_common, ~round(fisher.test(table(grepl(.x, imaging_plus_fusions$breakpoint_exons_common), imaging_plus_fusions$`Cluster Assignment`))$p.value, 10))
+  )
+
+common_df
+
+write_tsv(common_df, 
+          file.path(results_dir, "lgg-braf-fusion-common-breakpoint-freq-image-clusters.tsv"))
+
+```
+
+Print rare/novel fusion breakpoint count by predicted ancestry
+
+```{r}
+table(imaging_plus_fusions$breakpoint_exons_rare, imaging_plus_fusions$`Cluster Assignment`)
+
+```
+
+Print session info
+
+```{r}
+sessionInfo()
+
+```
