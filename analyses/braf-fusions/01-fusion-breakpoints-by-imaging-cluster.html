@@ -434,13 +434,13 @@ ancestry cohort</p>
 <p>Load libraries and set directories</p>
 <pre class="r"><code>library(data.table)
 library(tidyverse)</code></pre>
-<pre><code>## ── Attaching core tidyverse packages ─────────────────────────────────────────────────────────── tidyverse 2.0.0 ──
-## ✔ dplyr     1.1.1     ✔ readr     2.1.4
+<pre><code>## ── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
+## ✔ dplyr     1.1.2     ✔ readr     2.1.4
 ## ✔ forcats   1.0.0     ✔ stringr   1.5.0
 ## ✔ ggplot2   3.4.2     ✔ tibble    3.2.1
 ## ✔ lubridate 1.9.2     ✔ tidyr     1.3.0
 ## ✔ purrr     1.0.1     
-## ── Conflicts ───────────────────────────────────────────────────────────────────────────── tidyverse_conflicts() ──
+## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
 ## ✖ dplyr::between()     masks data.table::between()
 ## ✖ dplyr::filter()      masks stats::filter()
 ## ✖ dplyr::first()       masks data.table::first()
@@ -469,7 +469,7 @@ results_dir &lt;- file.path(analysis_dir, &quot;results&quot;)
 input_dir &lt;- file.path(analysis_dir, &quot;input&quot;)
 plot_dir &lt;- file.path(analysis_dir, &quot;plots&quot;)</code></pre>
 <p>Set file paths</p>
-<pre class="r"><code>fusion_file &lt;- file.path(results_dir, &quot;braf-fusions-exon-annotation.tsv&quot;)
+<pre class="r"><code>fusion_file &lt;- file.path(results_dir, &quot;braf-fusion-breakpoints-by-patient.tsv&quot;)
 hist_file &lt;- file.path(data_dir, &quot;histologies.tsv&quot;)
 cluster_file &lt;- file.path(input_dir, &quot;20231003_merged_imaging_clustering_risk_stratification.xlsx&quot;)
 fusion_dgd_file &lt;- file.path(data_dir, &quot;fusion-dgd.tsv.gz&quot;)</code></pre>
@@ -479,13 +479,25 @@ hist &lt;- read_tsv(hist_file, guess_max = 100000) %&gt;%
   filter(!is.na(pathology_diagnosis),
          composition != &quot;Derived Cell Line&quot;)</code></pre>
 <pre><code>## Rows: 47633 Columns: 58
-## ── Column specification ───────────────────────────────────────────────────────────────────────────────────────────
+## ── Column specification ────────────────────────────────────────────────────────
 ## Delimiter: &quot;\t&quot;
 ## chr (41): Kids_First_Participant_ID, Kids_First_Biospecimen_ID, sample_id, a...
 ## dbl (17): cell_line_passage, OS_days, EFS_days, age_at_diagnosis_days, age_a...
 ## 
 ## ℹ Use `spec()` to retrieve the full column specification for this data.
 ## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+<pre class="r"><code># fusion file
+break_df &lt;- read_tsv(fusion_file) %&gt;%
+  left_join(unique(hist[,c(&quot;cohort_participant_id&quot;, &quot;Kids_First_Participant_ID&quot;)])) %&gt;%
+  select(-Kids_First_Participant_ID)</code></pre>
+<pre><code>## Rows: 270 Columns: 5
+## ── Column specification ────────────────────────────────────────────────────────
+## Delimiter: &quot;\t&quot;
+## chr (5): Kids_First_Participant_ID, breakpoint_exons_common, breakpoint_exon...
+## 
+## ℹ Use `spec()` to retrieve the full column specification for this data.
+## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
+## Joining with `by = join_by(Kids_First_Participant_ID)`</code></pre>
 <pre class="r"><code># imaging cluster data
 image_clusters &lt;- readxl::read_excel(cluster_file) %&gt;%
     dplyr::rename(cohort_participant_id = SubjectID,
@@ -516,132 +528,19 @@ earliest_age_subtypes &lt;- image_clusters %&gt;%
   rowwise() %&gt;%
   dplyr::mutate(event_id_match = if_else(sapply(strsplit(earliest_events, &quot;;&quot;), function(x) event_id_original %in% x), &quot;yes&quot;, &quot;no&quot;))</code></pre>
 <pre><code>## Joining with `by = join_by(cohort_participant_id)`</code></pre>
-<p>Filter fusion file for inframe, duplications, kinase domain retained,
-tier 1/2</p>
-<pre class="r"><code># filter fusion file for in-frame fusions and duplications, and determine whether BRAF kinase domain is retained
-braf_fusions &lt;- read_tsv(fusion_file) %&gt;%
-  left_join(unique(hist[,c(&quot;Kids_First_Participant_ID&quot;, &quot;cohort_participant_id&quot;)])) %&gt;%
-  dplyr::filter(Fusion_Type == &quot;in-frame&quot;,
-         grepl(&quot;duplication&quot;, annots)) %&gt;%
-  mutate(keep = case_when(FusionName == &quot;KIAA1549--BRAF&quot; &amp; DomainRetainedGene1B == &quot;Yes&quot; ~ &quot;yes&quot;,
-                          FusionName == &quot;BRAF--KIAA1549&quot; &amp; DomainRetainedGene1A == &quot;Yes&quot; ~ &quot;yes&quot;,
-                          TRUE ~ &quot;no&quot;)) %&gt;%
-  # The below sample has two different common breakpoints and one is low conf in arriba, so we will remove that one
-  mutate(keep = case_when(Sample == &quot;BS_SDZY6RZ3&quot; &amp; LeftBreakpoint_position == 138867975 ~ &quot;no&quot;,
-                            TRUE ~ keep))</code></pre>
-<pre><code>## Warning: One or more parsing issues, call `problems()` on your data frame for details, e.g.:
-##   dat &lt;- vroom(...)
-##   problems(dat)</code></pre>
-<pre><code>## Rows: 260 Columns: 31
-## ── Column specification ───────────────────────────────────────────────────────────────────────────────────────────
-## Delimiter: &quot;\t&quot;
-## chr  (18): Sample, FusionName, DomainRetainedGene1A, DomainRetainedGene1B, G...
-## dbl   (6): caller.count, Chromosome, LeftBreakpoint_position, RightBreakpoin...
-## lgl   (5): Gene2A, Gene2B, Gene2A_anno, Gene2B_anno, reciprocal_exists
-## time  (2): LeftBreakpoint, RightBreakpoint
-## 
-## ℹ Use `spec()` to retrieve the full column specification for this data.
-## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
-## Joining with `by = join_by(Kids_First_Participant_ID)`</code></pre>
-<pre class="r"><code>braf_fusions_dgd &lt;- read_tsv(fusion_dgd_file) %&gt;%
-  dplyr::filter(FusionName == &quot;KIAA1549--BRAF&quot; &amp; !grepl(&quot;Tier 3|Tier 4&quot;, variant_tier)) %&gt;%
-  dplyr::rename(Kids_First_Biospecimen_ID = Sample) %&gt;%
-  left_join(hist[,c(&quot;Kids_First_Biospecimen_ID&quot;, &quot;cohort_participant_id&quot;)]) %&gt;%
-  dplyr::select(cohort_participant_id, FusionName, `5_prime_region`, `3_prime_region`) %&gt;%
-  dplyr::mutate(`5_prime_region` = gsub(&quot;^Exon |^exon &quot;, &quot;&quot;, `5_prime_region`),
-         `3_prime_region` = gsub(&quot;^Exon |^exon &quot;, &quot;&quot;, `3_prime_region`),                        
-         breakpoint_exons = paste(`5_prime_region`, `3_prime_region`, sep = &quot;:&quot;),
-         breakpoint_type = case_when(breakpoint_exons %in% c(&quot;16:9&quot;, &quot;15:9&quot;, &quot;16:11&quot;, &quot;18:10&quot;) ~ &quot;common&quot;,
-                                     TRUE ~ &quot;rare/novel&quot;),
-         keep = &quot;yes&quot;) %&gt;%
-  unique()</code></pre>
-<pre><code>## Rows: 533 Columns: 22
-## ── Column specification ───────────────────────────────────────────────────────────────────────────────────────────
-## Delimiter: &quot;\t&quot;
-## chr (14): Sample, FusionName, Fusion_Type, Gene1A, Gene1B, 5_prime_transcrip...
-## dbl  (2): JunctionReadCount, SpanningFragCount
-## lgl  (6): Gene2A, Gene2B, LeftBreakpoint, RightBreakpoint, Gene2A_anno, Gene...
-## 
-## ℹ Use `spec()` to retrieve the full column specification for this data.
-## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
-## Joining with `by = join_by(Kids_First_Biospecimen_ID)`</code></pre>
-<p>Consolidate all common and rare exon breakpoints per patient</p>
-<pre class="r"><code>common_fusions_pbta &lt;- braf_fusions %&gt;%
-  dplyr::filter(breakpoint_exons %in% c(&quot;16:9&quot;, &quot;15:9&quot;, &quot;16:11&quot;, &quot;18:10&quot;) &amp; keep == &quot;yes&quot;) %&gt;%
-  distinct(cohort_participant_id, breakpoint_exons, .keep_all = T) %&gt;%
-  group_by(cohort_participant_id) %&gt;%
-  summarise(breakpoint_exons_common = str_c(breakpoint_exons, collapse = &quot;;&quot;)) %&gt;%
-  unique()
-
-common_fusions &lt;- braf_fusions_dgd %&gt;%
-  dplyr::filter(breakpoint_exons %in% c(&quot;16:9&quot;, &quot;15:9&quot;, &quot;16:11&quot;, &quot;18:10&quot;) &amp; keep == &quot;yes&quot;) %&gt;%
-  distinct(cohort_participant_id, breakpoint_exons, .keep_all = T) %&gt;%
-  group_by(cohort_participant_id) %&gt;%
-  summarise(breakpoint_exons_common = str_c(breakpoint_exons, collapse = &quot;;&quot;)) %&gt;%
-  bind_rows(common_fusions_pbta) %&gt;%
-  distinct(cohort_participant_id, breakpoint_exons_common, .keep_all = T) %&gt;%
-  group_by(cohort_participant_id) %&gt;%
-  summarise(breakpoint_exons_common = str_c(breakpoint_exons_common, collapse = &quot;;&quot;)) %&gt;%
-  unique()
-  
-
-rare_novel_fusions_pbta &lt;- braf_fusions %&gt;%
-  dplyr::filter(!breakpoint_exons %in% c(&quot;16:9&quot;, &quot;15:9&quot;, &quot;16:11&quot;, &quot;18:10&quot;) &amp; keep == &quot;yes&quot;) %&gt;%
-  distinct(cohort_participant_id, breakpoint_exons, .keep_all = T) %&gt;%
-  group_by(cohort_participant_id) %&gt;%
-  summarise(breakpoint_exons_rare = str_c(breakpoint_exons, collapse = &quot;;&quot;)) %&gt;%
-  unique()
-
-rare_novel_fusions &lt;- braf_fusions_dgd %&gt;%
-  dplyr::filter(!breakpoint_exons %in% c(&quot;16:9&quot;, &quot;15:9&quot;, &quot;16:11&quot;, &quot;18:10&quot;) &amp; keep == &quot;yes&quot;) %&gt;%
-  distinct(cohort_participant_id, breakpoint_exons, .keep_all = T) %&gt;%
-  group_by(cohort_participant_id) %&gt;%
-  summarise(breakpoint_exons_rare = str_c(breakpoint_exons, collapse = &quot;;&quot;)) %&gt;%
-  bind_rows(rare_novel_fusions_pbta) %&gt;%
-  distinct(cohort_participant_id, breakpoint_exons_rare, .keep_all = T) %&gt;%
-  group_by(cohort_participant_id) %&gt;%
-  summarise(breakpoint_exons_rare = str_c(breakpoint_exons_rare, collapse = &quot;;&quot;)) %&gt;%
-  unique()</code></pre>
-<p>Merge breakpoint data to braf hist</p>
+<p>Merge breakpoint data to hist</p>
 <pre class="r"><code>imaging_plus_fusions &lt;- earliest_age_subtypes %&gt;%
-  left_join(common_fusions) %&gt;%
-  left_join(rare_novel_fusions)</code></pre>
-<pre><code>## Joining with `by = join_by(cohort_participant_id)`
-## Joining with `by = join_by(cohort_participant_id)`</code></pre>
+  left_join(break_df)</code></pre>
+<pre><code>## Joining with `by = join_by(cohort_participant_id)`</code></pre>
 <p>Add breakpoint_type column (common vs rare) and breakpoint_group
 column (common breakpoint type and rare merged)</p>
 <pre class="r"><code>imaging_plus_fusions &lt;- imaging_plus_fusions %&gt;%
-  dplyr::mutate(breakpoint_type = case_when(
-    !is.na(breakpoint_exons_common) &amp; !is.na(breakpoint_exons_rare) ~ NA_character_,
-    !is.na(breakpoint_exons_rare) ~ &quot;rare&quot;,
-    !is.na(breakpoint_exons_common) ~ &quot;common&quot;,
-    TRUE ~ NA_character_
-  )) %&gt;%
-  # Assign breakpoint group (unique common breakpoint or broad rare group)
-  dplyr::mutate(breakpoint_group = case_when(
-    !is.na(breakpoint_exons_common) &amp; !is.na(breakpoint_exons_rare) ~ NA_character_,
-    breakpoint_exons_common == &quot;16:9&quot; ~ &quot;16:9&quot;,
-    breakpoint_exons_common == &quot;15:9&quot; ~ &quot;15:9&quot;,
-    breakpoint_exons_common == &quot;16:11&quot; ~ &quot;16:11&quot;,
-    breakpoint_exons_common == &quot;18:10&quot; ~ &quot;18:10&quot;,
-    !is.na(breakpoint_exons_rare) ~ &quot;rare&quot;,
-    TRUE ~ NA_character_
-  )) %&gt;%
-  dplyr::mutate(breakpoint_group = fct_relevel(breakpoint_group,
-                                               c(&quot;18:10&quot;, &quot;16:9&quot;, &quot;15:9&quot;, &quot;16:11&quot;, &quot;rare&quot;)
-                                               ),
   # if NA subtype and there is a breakpoint, add KIAA1549--BRAF:
-              molecular_subtype = case_when(is.na(molecular_subtype) &amp; !is.na(breakpoint_type) ~ &quot;KIAA1549-BRAF&quot;, TRUE ~ molecular_subtype)) %&gt;%
+  dplyr::mutate(molecular_subtype = case_when(is.na(molecular_subtype) &amp; !is.na(breakpoint_type) ~ &quot;KIAA1549-BRAF&quot;,
+                                              TRUE ~ molecular_subtype)) %&gt;%
   # update col order
   select(cohort_participant_id, age_at_imaging_days, age_at_diagnosis_days_original, age_at_diagnosis_collapse, age_dx_match, event_id_original, earliest_events, event_id_match, Cohort, `Distance to 0`, `Distance to 1`, `Distance to 2`, `Cluster Assignment`, molecular_subtype, starts_with(&quot;breakpoint&quot;)) %&gt;%
   write_tsv(file.path(results_dir, &quot;imaging_clusters_plus_subtypes_breakpoints.tsv&quot;))</code></pre>
-<pre><code>## Warning: There were 201 warnings in `dplyr::mutate()`.
-## The first warning was:
-## ℹ In argument: `breakpoint_group = fct_relevel(...)`.
-## ℹ In row 1.
-## Caused by warning:
-## ! 4 unknown levels in `f`: 18:10, 15:9, 16:11, and rare
-## ℹ Run `dplyr::last_dplyr_warnings()` to see the 200 remaining warnings.</code></pre>
 <p>How many patients do we have breakpoint data for?</p>
 <pre class="r"><code>imaging_plus_fusions %&gt;%
   filter(!is.na(breakpoint_type)) %&gt;%
@@ -649,7 +548,8 @@ column (common breakpoint type and rare merged)</p>
 <pre><code>## [1] 95</code></pre>
 <div id="subtypes-type-by-cluster" class="section level2">
 <h2>Subtypes type by cluster</h2>
-<p>What is the distribution of type of breakpoints by cluster?</p>
+<p>What is the distribution of type of molecular subtypes by
+cluster?</p>
 <pre class="r"><code>table(imaging_plus_fusions$molecular_subtype, imaging_plus_fusions$`Cluster Assignment`)</code></pre>
 <pre><code>##                            
 ##                              1  2  3
@@ -689,7 +589,7 @@ column (common breakpoint type and rare merged)</p>
   filter(!is.na(breakpoint_type)) %&gt;%
   group_by(breakpoint_type, `Cluster Assignment`) %&gt;%
   summarise(count = n()) %&gt;%
-  group_by(`Cluster Assignment`) %&gt;%
+  group_by(breakpoint_type) %&gt;%
   mutate(total_count = sum(count),
          percentage = round(count / total_count * 100, 1)) %&gt;%
   dplyr::mutate(ct_perc = glue::glue(&quot;{count} ({percentage}%)&quot;)) %&gt;%
@@ -701,8 +601,14 @@ column (common breakpoint type and rare merged)</p>
   mutate(
     p = map_dbl(breakpoint_type, ~round(fisher.test(table(grepl(.x, imaging_plus_fusions$breakpoint_type), imaging_plus_fusions$`Cluster Assignment`))$p.value, 10))
   )
-
-write_tsv(type_df, 
+type_df</code></pre>
+<pre><code>## # A tibble: 2 × 5
+## # Groups:   breakpoint_type [2]
+##   breakpoint_type `1`        `2`        `3`                   p
+##   &lt;chr&gt;           &lt;glue&gt;     &lt;glue&gt;     &lt;glue&gt;            &lt;dbl&gt;
+## 1 common          57 (63.3%) 13 (14.4%) 20 (22.2%) 0.0000000007
+## 2 rare            0          0          5 (100%)   0.00601</code></pre>
+<pre class="r"><code>write_tsv(type_df, 
           file.path(results_dir, &quot;lgg-braf-fusion-common-breakpoint-type-image-clusters.tsv&quot;))</code></pre>
 <p>Assess distribution of breakpoint type by imaging cluster (common
 vs. rare)</p>
@@ -726,13 +632,11 @@ vs. rare)</p>
 ##   18:10  1  1  2</code></pre>
 <p>Calculate fusion breakpoint frequency by predicted ancestry and
 Fisher’s exact test p-value</p>
-<pre class="r"><code>common_breakpoints &lt;- c(&quot;16:9&quot;, &quot;15:9&quot;, &quot;16:11&quot;, &quot;18:10&quot;)
-
-common_df &lt;- imaging_plus_fusions %&gt;%
-  dplyr::filter(breakpoint_exons_common %in% common_breakpoints) %&gt;%
+<pre class="r"><code>common_df &lt;- imaging_plus_fusions %&gt;%
+  dplyr::filter(!is.na(breakpoint_exons_common)) %&gt;%
   group_by(breakpoint_exons_common, `Cluster Assignment`) %&gt;%
   summarise(count = n()) %&gt;%
-  group_by(`Cluster Assignment`) %&gt;%
+  group_by(breakpoint_exons_common) %&gt;%
   mutate(total_count = sum(count),
          percentage = round(count / total_count * 100, 1)) %&gt;%
   dplyr::mutate(ct_perc = glue::glue(&quot;{count} ({percentage}%)&quot;)) %&gt;%
@@ -745,7 +649,16 @@ common_df &lt;- imaging_plus_fusions %&gt;%
     p = map_dbl(breakpoint_exons_common, ~round(fisher.test(table(grepl(.x, imaging_plus_fusions$breakpoint_exons_common), imaging_plus_fusions$`Cluster Assignment`))$p.value, 10))
   )
 
-write_tsv(common_df, 
+common_df</code></pre>
+<pre><code>## # A tibble: 4 × 5
+## # Groups:   breakpoint_exons_common [4]
+##   breakpoint_exons_common `1`        `2`       `3`                p
+##   &lt;chr&gt;                   &lt;glue&gt;     &lt;glue&gt;    &lt;glue&gt;         &lt;dbl&gt;
+## 1 15:9                    8 (44.4%)  4 (22.2%) 6 (33.3%) 0.905     
+## 2 16:11                   8 (100%)   0         0         0.000955  
+## 3 16:9                    40 (66.7%) 8 (13.3%) 12 (20%)  0.00000123
+## 4 18:10                   1 (25%)    1 (25%)   2 (50%)   0.832</code></pre>
+<pre class="r"><code>write_tsv(common_df, 
           file.path(results_dir, &quot;lgg-braf-fusion-common-breakpoint-freq-image-clusters.tsv&quot;))</code></pre>
 <p>Print rare/novel fusion breakpoint count by predicted ancestry</p>
 <pre class="r"><code>table(imaging_plus_fusions$breakpoint_exons_rare, imaging_plus_fusions$`Cluster Assignment`)</code></pre>
@@ -758,42 +671,37 @@ write_tsv(common_df,
 <p>Print session info</p>
 <pre class="r"><code>sessionInfo()</code></pre>
 <pre><code>## R version 4.2.3 (2023-03-15)
-## Platform: x86_64-pc-linux-gnu (64-bit)
-## Running under: Ubuntu 22.04.3 LTS
+## Platform: aarch64-apple-darwin20 (64-bit)
+## Running under: macOS Ventura 13.6.5
 ## 
 ## Matrix products: default
-## BLAS:   /usr/lib/x86_64-linux-gnu/openblas-pthread/libblas.so.3
-## LAPACK: /usr/lib/x86_64-linux-gnu/openblas-pthread/libopenblasp-r0.3.20.so
+## BLAS:   /Library/Frameworks/R.framework/Versions/4.2-arm64/Resources/lib/libRblas.0.dylib
+## LAPACK: /Library/Frameworks/R.framework/Versions/4.2-arm64/Resources/lib/libRlapack.dylib
 ## 
 ## locale:
-##  [1] LC_CTYPE=en_US.UTF-8       LC_NUMERIC=C              
-##  [3] LC_TIME=en_US.UTF-8        LC_COLLATE=en_US.UTF-8    
-##  [5] LC_MONETARY=en_US.UTF-8    LC_MESSAGES=en_US.UTF-8   
-##  [7] LC_PAPER=en_US.UTF-8       LC_NAME=C                 
-##  [9] LC_ADDRESS=C               LC_TELEPHONE=C            
-## [11] LC_MEASUREMENT=en_US.UTF-8 LC_IDENTIFICATION=C       
+## [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
 ## 
 ## attached base packages:
 ## [1] stats     graphics  grDevices utils     datasets  methods   base     
 ## 
 ## other attached packages:
 ##  [1] readxl_1.4.2      lubridate_1.9.2   forcats_1.0.0     stringr_1.5.0    
-##  [5] dplyr_1.1.1       purrr_1.0.1       readr_2.1.4       tidyr_1.3.0      
+##  [5] dplyr_1.1.2       purrr_1.0.1       readr_2.1.4       tidyr_1.3.0      
 ##  [9] tibble_3.2.1      ggplot2_3.4.2     tidyverse_2.0.0   data.table_1.14.8
 ## 
 ## loaded via a namespace (and not attached):
 ##  [1] cellranger_1.1.0 bslib_0.4.2      compiler_4.2.3   pillar_1.9.0    
 ##  [5] jquerylib_0.1.4  tools_4.2.3      bit_4.0.5        digest_0.6.31   
-##  [9] timechange_0.2.0 jsonlite_1.8.4   evaluate_0.20    lifecycle_1.0.3 
-## [13] gtable_0.3.3     pkgconfig_2.0.3  rlang_1.1.0      cli_3.6.1       
-## [17] parallel_4.2.3   yaml_2.3.7       xfun_0.38        fastmap_1.1.1   
-## [21] withr_2.5.0      knitr_1.42       hms_1.1.3        generics_0.1.3  
-## [25] vctrs_0.6.2      sass_0.4.5       bit64_4.0.5      rprojroot_2.0.3 
-## [29] grid_4.2.3       tidyselect_1.2.0 glue_1.6.2       R6_2.5.1        
-## [33] fansi_1.0.4      vroom_1.6.1      rmarkdown_2.21   tzdb_0.3.0      
-## [37] magrittr_2.0.3   scales_1.2.1     htmltools_0.5.5  colorspace_2.1-0
-## [41] utf8_1.2.3       stringi_1.7.12   munsell_0.5.0    cachem_1.0.7    
-## [45] crayon_1.5.2</code></pre>
+##  [9] timechange_0.2.0 jsonlite_1.8.4   evaluate_0.21    lifecycle_1.0.3 
+## [13] gtable_0.3.3     pkgconfig_2.0.3  rlang_1.1.1      cli_3.6.1       
+## [17] rstudioapi_0.14  parallel_4.2.3   yaml_2.3.7       xfun_0.39       
+## [21] fastmap_1.1.1    withr_2.5.0      knitr_1.43       hms_1.1.3       
+## [25] generics_0.1.3   sass_0.4.6       vctrs_0.6.2      bit64_4.0.5     
+## [29] rprojroot_2.0.3  grid_4.2.3       tidyselect_1.2.0 glue_1.6.2      
+## [33] R6_2.5.1         fansi_1.0.4      vroom_1.6.1      rmarkdown_2.21  
+## [37] tzdb_0.3.0       magrittr_2.0.3   scales_1.2.1     htmltools_0.5.5 
+## [41] colorspace_2.1-0 utf8_1.2.3       stringi_1.7.12   munsell_0.5.0   
+## [45] cachem_1.0.8     crayon_1.5.2</code></pre>
 </div>
 
 
