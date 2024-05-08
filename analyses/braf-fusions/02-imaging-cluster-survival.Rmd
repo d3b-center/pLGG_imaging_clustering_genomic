@@ -4,7 +4,7 @@ output:
   html_document:
   toc: TRUE
 toc_float: TRUE
-author: Jo Lynne Rokita
+author: Ryan Corbett
 date: "2024"
 ---
 
