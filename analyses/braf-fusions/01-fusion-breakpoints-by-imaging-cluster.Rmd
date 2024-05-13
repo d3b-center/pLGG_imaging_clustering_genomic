@@ -16,6 +16,8 @@ Load libraries and set directories
 library(data.table)
 library(tidyverse)
 library(readxl)
+library(ComplexHeatmap)
+library(circlize)
 
 root_dir <- rprojroot::find_root(rprojroot::has_dir(".git"))
 
@@ -25,6 +27,7 @@ results_dir <- file.path(analysis_dir, "results")
 input_dir <- file.path(analysis_dir, "input")
 plot_dir <- file.path(analysis_dir, "plots")
 
+source(file.path(analysis_dir, "util", "heatmap_function.R"))
 ```
 
 Set file paths
@@ -47,7 +50,7 @@ hist <- read_tsv(hist_file, guess_max = 100000) %>%
 # fusion file
 break_df <- read_tsv(fusion_file) %>%
   left_join(unique(hist[,c("cohort_participant_id", "Kids_First_Participant_ID")])) %>%
-  select(-Kids_First_Participant_ID)
+  dplyr::select(-Kids_First_Participant_ID)
 
 # imaging cluster data
 image_clusters <- readxl::read_excel(cluster_file) %>%
@@ -62,7 +65,7 @@ image_clusters <- readxl::read_excel(cluster_file) %>%
 
 # choose earliest age for the sample subtype to utilize since imaging is taken closes to diagnosis
 earliest_age_subtypes <- image_clusters %>%
-  select(cohort_participant_id, age_at_imaging_days, age_at_diagnosis_days_original, event_id_original) %>%
+  dplyr::select(cohort_participant_id, age_at_imaging_days, age_at_diagnosis_days_original, event_id_original) %>%
   left_join(unique(hist[,c("cohort_participant_id", "sample_id", "molecular_subtype", "age_at_diagnosis_days", "age_at_event_days")]), by = c("cohort_participant_id")) %>%
   group_by(cohort_participant_id) %>%
   # select earliest event
@@ -95,7 +98,7 @@ imaging_plus_fusions <- imaging_plus_fusions %>%
   dplyr::mutate(molecular_subtype = case_when(is.na(molecular_subtype) & !is.na(breakpoint_type) ~ "KIAA1549-BRAF",
                                               TRUE ~ molecular_subtype)) %>%
   # update col order
-  select(cohort_participant_id, age_at_imaging_days, age_at_diagnosis_days_original, age_at_diagnosis_collapse, age_dx_match, event_id_original, earliest_events, event_id_match, Cohort, `Distance to 0`, `Distance to 1`, `Distance to 2`, `Cluster Assignment`, molecular_subtype, starts_with("breakpoint")) %>%
+  dplyr::select(cohort_participant_id, age_at_imaging_days, age_at_diagnosis_days_original, age_at_diagnosis_collapse, age_dx_match, event_id_original, earliest_events, event_id_match, Cohort, `Distance to 0`, `Distance to 1`, `Distance to 2`, `Cluster Assignment`, molecular_subtype, starts_with("breakpoint")) %>%
   write_tsv(file.path(results_dir, "imaging_clusters_plus_subtypes_breakpoints.tsv"))
 ```
 
@@ -146,6 +149,25 @@ type_df
 write_tsv(type_df, 
           file.path(results_dir, "lgg-braf-fusion-common-breakpoint-type-image-clusters.tsv"))
 
+```
+Generate enrichment heatmap of breakpoint types (common vs. rare) in imaging clusters
+
+```{r cluster-breakpoint type heatmap}
+plot_df <- imaging_plus_fusions %>%
+  dplyr::filter(!is.na(breakpoint_type)) %>%
+  dplyr::mutate(`Cluster Assignment` = glue::glue("cluster{`Cluster Assignment`}"))
+
+breakpoint_ht <- plot_enr(plot_df, "breakpoint_type", "Cluster Assignment",
+                     var1_names = c("common", "rare"),
+                     var2_names = c("cluster1", "cluster2", "cluster3"),
+                     padjust = FALSE)
+
+pdf(file.path(plot_dir, "breakpoint-type-by-cluster-ht.pdf"),
+    width = 4, height = 2.5)
+
+draw(breakpoint_ht)
+
+dev.off()
 ```
 
 
