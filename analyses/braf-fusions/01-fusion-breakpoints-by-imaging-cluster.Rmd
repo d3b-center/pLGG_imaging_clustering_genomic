@@ -99,6 +99,18 @@ imaging_plus_fusions <- imaging_plus_fusions %>%
                                               TRUE ~ molecular_subtype)) %>%
   # update col order
   dplyr::select(cohort_participant_id, age_at_imaging_days, age_at_diagnosis_days_original, age_at_diagnosis_collapse, age_dx_match, event_id_original, earliest_events, event_id_match, Cohort, `Distance to 0`, `Distance to 1`, `Distance to 2`, `Cluster Assignment`, molecular_subtype, starts_with("breakpoint")) %>%
+  dplyr::mutate(breakpoint_group = case_when(
+    breakpoint_group == "15:9" ~ "15:09",
+    breakpoint_group == "16:9" ~ "16:09",
+    TRUE ~ breakpoint_group
+  )) %>%
+  dplyr::mutate(breakpoint_exons_common = case_when(
+    breakpoint_exons_common == "15:9" ~ "15:09",
+    breakpoint_exons_common == "16:9" ~ "16:09",
+    TRUE ~ breakpoint_exons_common
+  )) %>%
+  dplyr::mutate(breakpoint_exons_rare = str_replace(breakpoint_exons_rare, ":8", ":08")) %>%
+  dplyr::mutate(breakpoint_exons_rare = str_replace(breakpoint_exons_rare, ":9", ":09")) %>%
   write_tsv(file.path(results_dir, "imaging_clusters_plus_subtypes_breakpoints.tsv"))
 ```
 
@@ -157,7 +169,7 @@ plot_df <- imaging_plus_fusions %>%
   dplyr::filter(!is.na(breakpoint_type)) %>%
   dplyr::mutate(`Cluster Assignment` = glue::glue("cluster{`Cluster Assignment`}"))
 
-breakpoint_ht <- plot_enr(plot_df, "breakpoint_type", "Cluster Assignment",
+breakpoint_type_ht <- plot_enr(plot_df, "breakpoint_type", "Cluster Assignment",
                      var1_names = c("common", "rare"),
                      var2_names = c("cluster1", "cluster2", "cluster3"),
                      padjust = FALSE)
@@ -165,7 +177,28 @@ breakpoint_ht <- plot_enr(plot_df, "breakpoint_type", "Cluster Assignment",
 pdf(file.path(plot_dir, "breakpoint-type-by-cluster-ht.pdf"),
     width = 4, height = 2.5)
 
-draw(breakpoint_ht)
+draw(breakpoint_type_ht)
+
+dev.off()
+```
+
+
+Generate enrichment heatmap of breakpoint groups in imaging clusters
+
+```{r cluster-breakpoint group heatmap}
+plot_df <- imaging_plus_fusions %>%
+  dplyr::filter(!is.na(breakpoint_type)) %>%
+  dplyr::mutate(`Cluster Assignment` = glue::glue("cluster{`Cluster Assignment`}"))
+
+breakpoint_group_ht <- plot_enr(plot_df, "breakpoint_group", "Cluster Assignment",
+                     var1_names = c("15:09", "16:09", "16:11", "18:10", "rare"),
+                     var2_names = c("cluster1", "cluster2", "cluster3"),
+                     padjust = FALSE)
+
+pdf(file.path(plot_dir, "breakpoint-group-by-cluster-ht.pdf"),
+    width = 4, height = 2.5)
+
+draw(breakpoint_group_ht)
 
 dev.off()
 ```
