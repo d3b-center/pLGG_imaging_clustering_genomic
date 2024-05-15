@@ -86,6 +86,11 @@ image_clusters <- image_clusters %>%
                 c("LGG/GNG, wildtype", "LGG/GNG KIAA1549::BRAF",
                   "LGG/GNG BRAF V600E", "LGG/GNG, NF1",
                   "LGG/GNG, other MAPK", "LGG/GNG, other alteration")
+  )) %>%
+  dplyr::mutate(breakpoint_group = case_when(
+    breakpoint_group == "15:9" ~ "15:09",
+    breakpoint_group == "16:9" ~ "16:09",
+    TRUE ~ breakpoint_group
   ))
 ```
 
