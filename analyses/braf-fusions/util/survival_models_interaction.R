@@ -532,8 +532,7 @@ plotForest <- function(model) {
   survival_n <- broom::glance(model) %>%
     dplyr::select(n, nevent)
   
-  # Convert survival model result to data frame, and exponentiate estimates/CIs to get HRs
-  # survival_df <- broom::tidy(model) %>%
+  # Convert survival model result to data frame and add CI columns from `conf.int` attribute
   survival_df <- summary(model)$coefficients %>%
     as.data.frame() %>%
     rownames_to_column("term") %>%
@@ -544,9 +543,6 @@ plotForest <- function(model) {
     add_row(term = term_order[!term_order %in% broom::tidy(model)$term], 
             `exp(coef)` = 0) %>%
     mutate(
-      # conf.low = exp(estimate-std.error),
-      # conf.high = exp(estimate+std.error),
-      # estimate = exp(estimate),
       conf.low = `lower .95`,
       conf.high = `upper .95`,
       estimate = `exp(coef)`,
