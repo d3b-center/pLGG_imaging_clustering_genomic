@@ -541,7 +541,7 @@ plotForest <- function(model) {
     
     # Add references
     add_row(term = term_order[!term_order %in% broom::tidy(model)$term], 
-            `exp(coef)` = 0) %>%
+            `exp(coef)` = 1) %>%
     mutate(
       conf.low = `lower .95`,
       conf.high = `upper .95`,
