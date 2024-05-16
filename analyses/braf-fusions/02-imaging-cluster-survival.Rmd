@@ -360,6 +360,8 @@ ggsave(file.path(plot_dir, "km_efs_imaging_braf_molecular_subtype.pdf"),
        width = 11, height = 5)
 ```
 
-
+```{r}
+sessionInfo()
+```
 
 
