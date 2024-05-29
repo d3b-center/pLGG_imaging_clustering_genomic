@@ -460,14 +460,49 @@ library(tidyverse)</code></pre>
 ## ✖ lubridate::year()    masks data.table::year()
 ## ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
 <pre class="r"><code>library(readxl)
-
-root_dir &lt;- rprojroot::find_root(rprojroot::has_dir(&quot;.git&quot;))
+library(ComplexHeatmap)</code></pre>
+<pre><code>## Loading required package: grid
+## ========================================
+## ComplexHeatmap version 2.14.0
+## Bioconductor page: http://bioconductor.org/packages/ComplexHeatmap/
+## Github page: https://github.com/jokergoo/ComplexHeatmap
+## Documentation: http://jokergoo.github.io/ComplexHeatmap-reference
+## 
+## If you use it in published research, please cite either one:
+## - Gu, Z. Complex Heatmap Visualization. iMeta 2022.
+## - Gu, Z. Complex heatmaps reveal patterns and correlations in multidimensional 
+##     genomic data. Bioinformatics 2016.
+## 
+## 
+## The new InteractiveComplexHeatmap package can directly export static 
+## complex heatmaps into an interactive Shiny app with zero effort. Have a try!
+## 
+## This message can be suppressed by:
+##   suppressPackageStartupMessages(library(ComplexHeatmap))
+## ========================================</code></pre>
+<pre class="r"><code>library(circlize)</code></pre>
+<pre><code>## ========================================
+## circlize version 0.4.15
+## CRAN page: https://cran.r-project.org/package=circlize
+## Github page: https://github.com/jokergoo/circlize
+## Documentation: https://jokergoo.github.io/circlize_book/book/
+## 
+## If you use it in published research, please cite:
+## Gu, Z. circlize implements and enhances circular visualization
+##   in R. Bioinformatics 2014.
+## 
+## This message can be suppressed by:
+##   suppressPackageStartupMessages(library(circlize))
+## ========================================</code></pre>
+<pre class="r"><code>root_dir &lt;- rprojroot::find_root(rprojroot::has_dir(&quot;.git&quot;))
 
 data_dir &lt;- file.path(root_dir, &quot;data&quot;)
 analysis_dir &lt;- file.path(root_dir, &quot;analyses&quot;, &quot;braf-fusions&quot;)
 results_dir &lt;- file.path(analysis_dir, &quot;results&quot;)
 input_dir &lt;- file.path(analysis_dir, &quot;input&quot;)
-plot_dir &lt;- file.path(analysis_dir, &quot;plots&quot;)</code></pre>
+plot_dir &lt;- file.path(analysis_dir, &quot;plots&quot;)
+
+source(file.path(analysis_dir, &quot;util&quot;, &quot;heatmap_function.R&quot;))</code></pre>
 <p>Set file paths</p>
 <pre class="r"><code>fusion_file &lt;- file.path(results_dir, &quot;braf-fusion-breakpoints-by-patient.tsv&quot;)
 hist_file &lt;- file.path(data_dir, &quot;histologies.tsv&quot;)
@@ -489,7 +524,7 @@ hist &lt;- read_tsv(hist_file, guess_max = 100000) %&gt;%
 <pre class="r"><code># fusion file
 break_df &lt;- read_tsv(fusion_file) %&gt;%
   left_join(unique(hist[,c(&quot;cohort_participant_id&quot;, &quot;Kids_First_Participant_ID&quot;)])) %&gt;%
-  select(-Kids_First_Participant_ID)</code></pre>
+  dplyr::select(-Kids_First_Participant_ID)</code></pre>
 <pre><code>## Rows: 270 Columns: 5
 ## ── Column specification ────────────────────────────────────────────────────────
 ## Delimiter: &quot;\t&quot;
@@ -511,7 +546,7 @@ image_clusters &lt;- readxl::read_excel(cluster_file) %&gt;%
 
 # choose earliest age for the sample subtype to utilize since imaging is taken closes to diagnosis
 earliest_age_subtypes &lt;- image_clusters %&gt;%
-  select(cohort_participant_id, age_at_imaging_days, age_at_diagnosis_days_original, event_id_original) %&gt;%
+  dplyr::select(cohort_participant_id, age_at_imaging_days, age_at_diagnosis_days_original, event_id_original) %&gt;%
   left_join(unique(hist[,c(&quot;cohort_participant_id&quot;, &quot;sample_id&quot;, &quot;molecular_subtype&quot;, &quot;age_at_diagnosis_days&quot;, &quot;age_at_event_days&quot;)]), by = c(&quot;cohort_participant_id&quot;)) %&gt;%
   group_by(cohort_participant_id) %&gt;%
   # select earliest event
@@ -539,7 +574,19 @@ column (common breakpoint type and rare merged)</p>
   dplyr::mutate(molecular_subtype = case_when(is.na(molecular_subtype) &amp; !is.na(breakpoint_type) ~ &quot;KIAA1549-BRAF&quot;,
                                               TRUE ~ molecular_subtype)) %&gt;%
   # update col order
-  select(cohort_participant_id, age_at_imaging_days, age_at_diagnosis_days_original, age_at_diagnosis_collapse, age_dx_match, event_id_original, earliest_events, event_id_match, Cohort, `Distance to 0`, `Distance to 1`, `Distance to 2`, `Cluster Assignment`, molecular_subtype, starts_with(&quot;breakpoint&quot;)) %&gt;%
+  dplyr::select(cohort_participant_id, age_at_imaging_days, age_at_diagnosis_days_original, age_at_diagnosis_collapse, age_dx_match, event_id_original, earliest_events, event_id_match, Cohort, `Distance to 0`, `Distance to 1`, `Distance to 2`, `Cluster Assignment`, molecular_subtype, starts_with(&quot;breakpoint&quot;)) %&gt;%
+  dplyr::mutate(breakpoint_group = case_when(
+    breakpoint_group == &quot;15:9&quot; ~ &quot;15:09&quot;,
+    breakpoint_group == &quot;16:9&quot; ~ &quot;16:09&quot;,
+    TRUE ~ breakpoint_group
+  )) %&gt;%
+  dplyr::mutate(breakpoint_exons_common = case_when(
+    breakpoint_exons_common == &quot;15:9&quot; ~ &quot;15:09&quot;,
+    breakpoint_exons_common == &quot;16:9&quot; ~ &quot;16:09&quot;,
+    TRUE ~ breakpoint_exons_common
+  )) %&gt;%
+  dplyr::mutate(breakpoint_exons_rare = str_replace(breakpoint_exons_rare, &quot;:8&quot;, &quot;:08&quot;)) %&gt;%
+  dplyr::mutate(breakpoint_exons_rare = str_replace(breakpoint_exons_rare, &quot;:9&quot;, &quot;:09&quot;)) %&gt;%
   write_tsv(file.path(results_dir, &quot;imaging_clusters_plus_subtypes_breakpoints.tsv&quot;))</code></pre>
 <p>How many patients do we have breakpoint data for?</p>
 <pre class="r"><code>imaging_plus_fusions %&gt;%
@@ -610,6 +657,44 @@ type_df</code></pre>
 ## 2 rare            0          0          5 (100%)   0.00601</code></pre>
 <pre class="r"><code>write_tsv(type_df, 
           file.path(results_dir, &quot;lgg-braf-fusion-common-breakpoint-type-image-clusters.tsv&quot;))</code></pre>
+<p>Generate enrichment heatmap of breakpoint types (common vs. rare) in
+imaging clusters</p>
+<pre class="r"><code>plot_df &lt;- imaging_plus_fusions %&gt;%
+  dplyr::filter(!is.na(breakpoint_type)) %&gt;%
+  dplyr::mutate(`Cluster Assignment` = glue::glue(&quot;cluster{`Cluster Assignment`}&quot;))
+
+breakpoint_type_ht &lt;- plot_enr(plot_df, &quot;breakpoint_type&quot;, &quot;Cluster Assignment&quot;,
+                     var1_names = c(&quot;common&quot;, &quot;rare&quot;),
+                     var2_names = c(&quot;cluster1&quot;, &quot;cluster2&quot;, &quot;cluster3&quot;),
+                     padjust = FALSE)
+
+pdf(file.path(plot_dir, &quot;breakpoint-type-by-cluster-ht.pdf&quot;),
+    width = 4, height = 2.5)
+
+draw(breakpoint_type_ht)
+
+dev.off()</code></pre>
+<pre><code>## quartz_off_screen 
+##                 2</code></pre>
+<p>Generate enrichment heatmap of breakpoint groups in imaging
+clusters</p>
+<pre class="r"><code>plot_df &lt;- imaging_plus_fusions %&gt;%
+  dplyr::filter(!is.na(breakpoint_type)) %&gt;%
+  dplyr::mutate(`Cluster Assignment` = glue::glue(&quot;cluster{`Cluster Assignment`}&quot;))
+
+breakpoint_group_ht &lt;- plot_enr(plot_df, &quot;breakpoint_group&quot;, &quot;Cluster Assignment&quot;,
+                     var1_names = c(&quot;15:09&quot;, &quot;16:09&quot;, &quot;16:11&quot;, &quot;18:10&quot;, &quot;rare&quot;),
+                     var2_names = c(&quot;cluster1&quot;, &quot;cluster2&quot;, &quot;cluster3&quot;),
+                     padjust = FALSE)
+
+pdf(file.path(plot_dir, &quot;breakpoint-group-by-cluster-ht.pdf&quot;),
+    width = 4, height = 2.5)
+
+draw(breakpoint_group_ht)
+
+dev.off()</code></pre>
+<pre><code>## quartz_off_screen 
+##                 2</code></pre>
 <p>Assess distribution of breakpoint type by imaging cluster (common
 vs. rare)</p>
 <pre class="r"><code>fisher.test(table(imaging_plus_fusions$breakpoint_type, imaging_plus_fusions$`Cluster Assignment`))</code></pre>
@@ -626,9 +711,9 @@ vs. rare)</p>
 <pre class="r"><code>table(imaging_plus_fusions$breakpoint_exons_common, imaging_plus_fusions$`Cluster Assignment`)</code></pre>
 <pre><code>##        
 ##          1  2  3
-##   15:9   8  4  6
+##   15:09  8  4  6
+##   16:09 40  8 12
 ##   16:11  8  0  0
-##   16:9  40  8 12
 ##   18:10  1  1  2</code></pre>
 <p>Calculate fusion breakpoint frequency by predicted ancestry and
 Fisher’s exact test p-value</p>
@@ -654,9 +739,9 @@ common_df</code></pre>
 ## # Groups:   breakpoint_exons_common [4]
 ##   breakpoint_exons_common `1`        `2`       `3`                p
 ##   &lt;chr&gt;                   &lt;glue&gt;     &lt;glue&gt;    &lt;glue&gt;         &lt;dbl&gt;
-## 1 15:9                    8 (44.4%)  4 (22.2%) 6 (33.3%) 0.905     
-## 2 16:11                   8 (100%)   0         0         0.000955  
-## 3 16:9                    40 (66.7%) 8 (13.3%) 12 (20%)  0.00000123
+## 1 15:09                   8 (44.4%)  4 (22.2%) 6 (33.3%) 0.905     
+## 2 16:09                   40 (66.7%) 8 (13.3%) 12 (20%)  0.00000123
+## 3 16:11                   8 (100%)   0         0         0.000955  
 ## 4 18:10                   1 (25%)    1 (25%)   2 (50%)   0.832</code></pre>
 <pre class="r"><code>write_tsv(common_df, 
           file.path(results_dir, &quot;lgg-braf-fusion-common-breakpoint-freq-image-clusters.tsv&quot;))</code></pre>
@@ -664,44 +749,56 @@ common_df</code></pre>
 <pre class="r"><code>table(imaging_plus_fusions$breakpoint_exons_rare, imaging_plus_fusions$`Cluster Assignment`)</code></pre>
 <pre><code>##        
 ##         1 2 3
-##   13:9  0 0 1
-##   14:8  0 0 1
+##   13:09 0 0 1
+##   14:08 0 0 1
 ##   15:11 0 0 2
-##   19:9  0 0 1</code></pre>
+##   19:09 0 0 1</code></pre>
 <p>Print session info</p>
 <pre class="r"><code>sessionInfo()</code></pre>
-<pre><code>## R version 4.2.3 (2023-03-15)
-## Platform: aarch64-apple-darwin20 (64-bit)
-## Running under: macOS Ventura 13.6.5
+<pre><code>## R version 4.2.2 (2022-10-31)
+## Platform: x86_64-apple-darwin17.0 (64-bit)
+## Running under: macOS Big Sur ... 10.16
 ## 
 ## Matrix products: default
-## BLAS:   /Library/Frameworks/R.framework/Versions/4.2-arm64/Resources/lib/libRblas.0.dylib
-## LAPACK: /Library/Frameworks/R.framework/Versions/4.2-arm64/Resources/lib/libRlapack.dylib
+## BLAS:   /Library/Frameworks/R.framework/Versions/4.2/Resources/lib/libRblas.0.dylib
+## LAPACK: /Library/Frameworks/R.framework/Versions/4.2/Resources/lib/libRlapack.dylib
 ## 
 ## locale:
 ## [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
 ## 
 ## attached base packages:
-## [1] stats     graphics  grDevices utils     datasets  methods   base     
+## [1] grid      stats     graphics  grDevices utils     datasets  methods  
+## [8] base     
 ## 
 ## other attached packages:
-##  [1] readxl_1.4.2      lubridate_1.9.2   forcats_1.0.0     stringr_1.5.0    
-##  [5] dplyr_1.1.2       purrr_1.0.1       readr_2.1.4       tidyr_1.3.0      
-##  [9] tibble_3.2.1      ggplot2_3.4.2     tidyverse_2.0.0   data.table_1.14.8
+##  [1] circlize_0.4.15       ComplexHeatmap_2.14.0 readxl_1.4.2         
+##  [4] lubridate_1.9.2       forcats_1.0.0         stringr_1.5.0        
+##  [7] dplyr_1.1.2           purrr_1.0.1           readr_2.1.4          
+## [10] tidyr_1.3.0           tibble_3.2.1          ggplot2_3.4.2        
+## [13] tidyverse_2.0.0       data.table_1.14.8    
 ## 
 ## loaded via a namespace (and not attached):
-##  [1] cellranger_1.1.0 bslib_0.4.2      compiler_4.2.3   pillar_1.9.0    
-##  [5] jquerylib_0.1.4  tools_4.2.3      bit_4.0.5        digest_0.6.31   
-##  [9] timechange_0.2.0 jsonlite_1.8.4   evaluate_0.21    lifecycle_1.0.3 
-## [13] gtable_0.3.3     pkgconfig_2.0.3  rlang_1.1.1      cli_3.6.1       
-## [17] rstudioapi_0.14  parallel_4.2.3   yaml_2.3.7       xfun_0.39       
-## [21] fastmap_1.1.1    withr_2.5.0      knitr_1.43       hms_1.1.3       
-## [25] generics_0.1.3   sass_0.4.6       vctrs_0.6.2      bit64_4.0.5     
-## [29] rprojroot_2.0.3  grid_4.2.3       tidyselect_1.2.0 glue_1.6.2      
-## [33] R6_2.5.1         fansi_1.0.4      vroom_1.6.1      rmarkdown_2.21  
-## [37] tzdb_0.3.0       magrittr_2.0.3   scales_1.2.1     htmltools_0.5.5 
-## [41] colorspace_2.1-0 utf8_1.2.3       stringi_1.7.12   munsell_0.5.0   
-## [45] cachem_1.0.8     crayon_1.5.2</code></pre>
+##  [1] png_0.1-8           rprojroot_2.0.3     digest_0.6.31      
+##  [4] foreach_1.5.2       utf8_1.2.3          R6_2.5.1           
+##  [7] cellranger_1.1.0    stats4_4.2.2        evaluate_0.20      
+## [10] pillar_1.9.0        GlobalOptions_0.1.2 rlang_1.1.0        
+## [13] rstudioapi_0.14     jquerylib_0.1.4     S4Vectors_0.36.2   
+## [16] GetoptLong_1.0.5    rmarkdown_2.21      bit_4.0.5          
+## [19] munsell_0.5.0       compiler_4.2.2      xfun_0.38          
+## [22] pkgconfig_2.0.3     BiocGenerics_0.44.0 shape_1.4.6        
+## [25] htmltools_0.5.5     tidyselect_1.2.0    IRanges_2.32.0     
+## [28] codetools_0.2-19    matrixStats_0.63.0  fansi_1.0.4        
+## [31] crayon_1.5.2        tzdb_0.3.0          withr_2.5.0        
+## [34] jsonlite_1.8.4      gtable_0.3.3        lifecycle_1.0.3    
+## [37] magrittr_2.0.3      scales_1.2.1        vroom_1.6.1        
+## [40] cli_3.6.1           stringi_1.7.12      cachem_1.0.7       
+## [43] doParallel_1.0.17   bslib_0.4.2         generics_0.1.3     
+## [46] vctrs_0.6.1         rjson_0.2.21        RColorBrewer_1.1-3 
+## [49] iterators_1.0.14    tools_4.2.2         bit64_4.0.5        
+## [52] glue_1.6.2          hms_1.1.3           parallel_4.2.2     
+## [55] fastmap_1.1.1       yaml_2.3.7          timechange_0.2.0   
+## [58] clue_0.3-64         colorspace_2.1-1    cluster_2.1.4      
+## [61] knitr_1.42          sass_0.4.5</code></pre>
 </div>
 
 
