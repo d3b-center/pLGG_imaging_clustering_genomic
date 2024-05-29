@@ -1,0 +1,367 @@
+---
+title: 'Assess survival in imaging clusters'
+output: 
+  html_document:
+  toc: TRUE
+toc_float: TRUE
+author: Ryan Corbett
+date: "2024"
+---
+
+This script models event-free survival by imaging cluster 
+  
+Load libraries and set directories
+```{r}
+library(tidyverse)
+library(readxl)
+library(survival)
+library(patchwork)
+
+root_dir <- rprojroot::find_root(rprojroot::has_dir(".git"))
+
+data_dir <- file.path(root_dir, "data")
+analysis_dir <- file.path(root_dir, "analyses", "braf-fusions")
+results_dir <- file.path(analysis_dir, "results")
+input_dir <- file.path(analysis_dir, "input")
+plot_dir <- file.path(analysis_dir, "plots")
+
+source(file.path(analysis_dir, "util", "survival_models_interaction.R"))
+```
+
+
+```{r}
+fusion_file <- file.path(results_dir, "braf-fusion-breakpoints-by-patient.tsv")
+hist_file <- file.path(data_dir, "histologies.tsv")
+cluster_file <- file.path(input_dir, "imaging_clustering_cohort.csv")
+fusion_dgd_file <- file.path(data_dir, "fusion-dgd.tsv.gz")
+```
+
+
+```{r}
+hist <- read_tsv(hist_file, guess_max = 100000)
+
+image_clusters <- read_csv(cluster_file) %>%
+  dplyr::rename(cohort_participant_id = SubjectID,
+                imaging_cluster = `Imaging Cluster Assignment`) %>%
+  dplyr::mutate(imaging_cluster = glue::glue("cluster{imaging_cluster}")) %>%
+  left_join(hist[,c("broad_histology", "cancer_group", "molecular_subtype", "cohort_participant_id", "Kids_First_Participant_ID")]) %>%
+  dplyr::filter(!is.na(broad_histology) | !is.na(cancer_group) | !is.na(molecular_subtype)) %>%
+  dplyr::distinct(cohort_participant_id, .keep_all = T) %>%
+  dplyr::rename(OS_days = overall_survival_y,
+                EFS_days = event_free_survival_y) %>%
+  dplyr::mutate(OS_years = OS_days / 365.25,
+                EFS_years = EFS_days / 365.25) %>%
+  dplyr::mutate(EFS_status = case_when(
+    `progressed?` == "y" ~ "EVENT",
+    TRUE ~ "NO EVENT"
+  )) %>%
+  dplyr::mutate(imaging_cluster = factor(imaging_cluster)) %>%
+  dplyr::mutate(extent_of_tumor_resection_x = case_when(
+    extent_of_tumor_resection_x == "Not Applicable" ~ "No Resection",
+    TRUE ~ extent_of_tumor_resection_x
+  ))
+```
+
+```{r}
+fusions <- read_tsv(fusion_file)
+
+image_clusters <- image_clusters %>%
+  left_join(fusions)
+```
+
+Consolidate molecular subtypes into 6 groups (BRAF V600E, BRAF fusions, NF1, MAPK, wt, other alteration)
+
+```{r}
+image_clusters <- image_clusters %>%
+  dplyr::mutate(mol_sub_group = case_when(
+    grepl("BRAF V600E", molecular_subtype) ~ "LGG/GNG BRAF V600E",
+    grepl("-BRAF", molecular_subtype) | (!is.na(breakpoint_exons_common) & is.na(molecular_subtype)) ~ "LGG/GNG KIAA1549::BRAF",
+    grepl("NF1", molecular_subtype) ~ "LGG/GNG, NF1",
+    grepl("MAPK", molecular_subtype) ~ "LGG/GNG, other MAPK",
+    grepl("wildtype", molecular_subtype) ~ "LGG/GNG, wildtype",
+    grepl("LGG|GNG", molecular_subtype) & !grepl("To be classified", molecular_subtype) ~ "LGG/GNG, other alteration",
+    TRUE ~ NA_character_
+  )) %>%
+  dplyr::mutate(mol_sub_group = fct_relevel(mol_sub_group,
+                c("LGG/GNG, wildtype", "LGG/GNG KIAA1549::BRAF",
+                  "LGG/GNG BRAF V600E", "LGG/GNG, NF1",
+                  "LGG/GNG, other MAPK", "LGG/GNG, other alteration")
+  )) %>%
+  dplyr::mutate(breakpoint_group = case_when(
+    breakpoint_group == "15:9" ~ "15:09",
+    breakpoint_group == "16:9" ~ "16:09",
+    TRUE ~ breakpoint_group
+  ))
+```
+
+Frequency of molecular subtypes in imaging clusters
+
+```{r}
+round(table(image_clusters$mol_sub_group, image_clusters$imaging_cluster)/as.vector(table(image_clusters$mol_sub_group)), 2)
+
+fisher.test(table(image_clusters$mol_sub_group, as.character(image_clusters$imaging_cluster)), simulate.p.value = T)
+```
+
+Frequency of molecular subtypes in imaging clusters
+
+```{r}
+round(table(image_clusters$imaging_cluster, image_clusters$extent_of_tumor_resection_x)/as.vector(table(image_clusters$imaging_cluster)), 2)
+
+fisher.test(table(image_clusters$imaging_cluster, as.character(image_clusters$extent_of_tumor_resection_x)))
+```
+
+Plot KM survival by imaging cluster
+
+```{r}
+kap_efs_cluster <- survival_analysis(
+  metadata  = image_clusters,
+  ind_var = "imaging_cluster",
+  test = "kap.meier",
+  metadata_sample_col = "cohort_participant_id", 
+  days_col = "EFS_days",
+  status_col = "EFS_status"
+  )
+
+km_plot_cluster <- plotKM(model = kap_efs_cluster,
+                    variable = "imaging_cluster",
+                    combined = F, 
+                    title = "Event-free survival by imaging cluster")
+
+km_plot_cluster
+
+ggsave(file.path(plot_dir, "km_efs_imaging_cluster.pdf"),
+       width = 7.5, height = 5)
+```
+
+Generate coxph interaction model including extent of tumor resection, molecualr subgroup, and imaging cluster
+
+```{r}
+efs_model_all_int <- fit_save_model(image_clusters,
+                                    terms = "extent_of_tumor_resection_x+mol_sub_group*imaging_cluster",
+               file.path(results_dir, "coxph_imaging_efs_int_resection_subtype_cluster.RDS"),
+               "multivariate",
+               years_col = "EFS_years", status_col = "EFS_status"
+              )
+
+car::Anova(readRDS(file.path(results_dir, "coxph_imaging_efs_int_resection_subtype_cluster.RDS")), type = 3, test = "Wald")
+
+plotForest(readRDS(file.path(results_dir, "coxph_imaging_efs_int_resection_subtype_cluster.RDS")))
+
+ggsave(file.path(plot_dir, "imaging_forest_efs_int_resection_subtype_cluster.pdf"),
+       width = 9, height = 6)
+```
+
+There is some evidence for sig interaction effect between molecular subtype and imaging cluster, particularly in KIAA1549-BRAF fusion subtype tumors vs. wt. Determine if this interaction effect is significant when grouping tumors into BRAF fusions vs. non-BRAF fusion: 
+
+```{r}
+image_clusters <- image_clusters %>%
+  dplyr::mutate(braf_fusion = case_when(
+    mol_sub_group == "LGG/GNG KIAA1549::BRAF" ~ "BRAF fusion",
+    TRUE ~ "non-BRAF fusion"
+  )) %>%
+  dplyr::mutate(braf_fusion = fct_relevel(braf_fusion,
+                                          c("non-BRAF fusion",
+                                            "BRAF fusion")))
+
+efs_model_fusion_int <- fit_save_model(image_clusters,
+                                    terms = "extent_of_tumor_resection_x+braf_fusion*imaging_cluster",
+               file.path(results_dir, "coxph_imaging_efs_int_resection_fusion_cluster.RDS"),
+               "multivariate",
+               years_col = "EFS_years", status_col = "EFS_status"
+              )
+
+car::Anova(readRDS(file.path(results_dir, "coxph_imaging_efs_int_resection_fusion_cluster.RDS")), type = 3, test = "Wald")
+
+plotForest(readRDS(file.path(results_dir, "coxph_imaging_efs_int_resection_fusion_cluster.RDS")))
+
+ggsave(file.path(plot_dir, "imaging_forest_efs_int_resection_fusion_cluster.pdf"),
+       width = 7.5, height = 5)
+```
+BRAF fusion-imaging cluster interaction effect is now statistically signfiicant. Let's model and plot survival by imaging cluster for BRAF fusion and non-BRAF fusion tumors
+
+BRAF fusion tumors:
+
+```{r}
+kap_efs_braf_cluster <- survival_analysis(
+  metadata  = image_clusters[grepl("LGG/GNG KIAA1549::BRAF", image_clusters$mol_sub_group),],
+  ind_var = "imaging_cluster",
+  test = "kap.meier",
+  metadata_sample_col = "cohort_participant_id", 
+  days_col = "EFS_days",
+  status_col = "EFS_status"
+  )
+
+km_plot_braf_cluster <- plotKM(model = kap_efs_braf_cluster,
+                    variable = "imaging_cluster",
+                    combined = F, 
+                    title = "Event-free survival by imaging cluster, KIAA1549::BRAF")
+
+km_plot_braf_cluster
+
+ggsave(file.path(plot_dir, "km_efs_imaging_braf_cluster.pdf"),
+       width = 7.5, height = 5)
+```
+
+```{r}
+efs_model_braf_cluster_add <- fit_save_model(image_clusters[grepl("KIAA1549::BRAF", image_clusters$mol_sub_group),],
+                                    terms = "extent_of_tumor_resection_x+imaging_cluster",
+               file.path(results_dir, "coxph_imaging_braf_efs_add_resection_cluster.RDS"),
+               "multivariate",
+               years_col = "EFS_years", status_col = "EFS_status"
+              )
+
+anova(readRDS(file.path(results_dir, "coxph_imaging_braf_efs_add_resection_cluster.RDS")))
+
+plotForest(readRDS(file.path(results_dir, "coxph_imaging_braf_efs_add_resection_cluster.RDS")))
+
+ggsave(file.path(plot_dir, "imaging_forest_efs_braf_add_resection_cluster.pdf"),
+       width = 7.5, height = 3)
+```
+
+Non-BRAF fusion tumors:
+
+```{r}
+kap_efs_nonbraf_cluster <- survival_analysis(
+  metadata  = image_clusters[!grepl("LGG/GNG KIAA1549::BRAF", image_clusters$mol_sub_group),],
+  ind_var = "imaging_cluster",
+  test = "kap.meier",
+  metadata_sample_col = "cohort_participant_id", 
+  days_col = "EFS_days",
+  status_col = "EFS_status"
+  )
+
+km_plot_nonbraf_cluster <- plotKM(model = kap_efs_nonbraf_cluster,
+                    variable = "imaging_cluster",
+                    combined = F, 
+                    title = "Event-free survival by imaging cluster, non-KIAA1549::BRAF")
+
+km_plot_nonbraf_cluster
+
+ggsave(file.path(plot_dir, "km_efs_imaging_nonbraf_cluster.pdf"),
+       width = 7.5, height = 5)
+```
+
+```{r}
+efs_model_nonbraf_cluster_add <- fit_save_model(image_clusters[!grepl("KIAA1549::BRAF", image_clusters$mol_sub_group),],
+                                    terms = "extent_of_tumor_resection_x+imaging_cluster",
+               file.path(results_dir, "coxph_imaging_nonbraf_efs_add_resection_cluster.RDS"),
+               "multivariate",
+               years_col = "EFS_years", status_col = "EFS_status"
+              )
+
+anova(readRDS(file.path(results_dir, "coxph_imaging_nonbraf_efs_add_resection_cluster.RDS")))
+
+plotForest(readRDS(file.path(results_dir, "coxph_imaging_nonbraf_efs_add_resection_cluster.RDS")))
+
+ggsave(file.path(plot_dir, "imaging_forest_efs_nonbraf_add_resection_cluster.pdf"),
+       width = 7.5, height = 3)
+```
+
+
+Plot BRAF fusion EFS by breakpoint type (common vs. rare)
+
+```{r}
+kap_efs_type <- survival_analysis(
+  metadata  = image_clusters[grepl("LGG/GNG KIAA1549::BRAF", image_clusters$mol_sub_group),],
+  ind_var = "breakpoint_type",
+  test = "kap.meier",
+  metadata_sample_col = "cohort_participant_id", 
+  days_col = "EFS_days",
+  status_col = "EFS_status"
+  )
+
+km_plot_type <- plotKM(model = kap_efs_type,
+                    variable = "breakpoint_type",
+                    combined = F, 
+                    title = "Event-free survival by breakpoint type")
+
+km_plot_type
+
+ggsave(file.path(plot_dir, "km_efs_imaging_braf_breakpoint_type.pdf"),
+       width = 7.5, height = 5)
+```
+
+
+```{r}
+kap_efs_group <- survival_analysis(
+  metadata  = image_clusters[grepl("LGG/GNG KIAA1549::BRAF", image_clusters$mol_sub_group),],
+  ind_var = "breakpoint_group",
+  test = "kap.meier",
+  metadata_sample_col = "cohort_participant_id", 
+  days_col = "EFS_days",
+  status_col = "EFS_status"
+  )
+
+km_plot_group <- plotKM(model = kap_efs_group,
+                    variable = "breakpoint_group",
+                    combined = F, 
+                    title = "Event-free survival by breakpoint group")
+
+km_plot_group
+
+ggsave(file.path(plot_dir, "km_efs_imaging_braf_breakpoint_group.pdf"),
+       width = 7.5, height = 5)
+```
+Plot BRAF fusion EFS by breakpoint group
+
+```{r}
+efs_model_braf_cluster_breakpoint_add <- fit_save_model(image_clusters[grepl("KIAA1549::BRAF", image_clusters$mol_sub_group),],
+                                    terms = "extent_of_tumor_resection_x+imaging_cluster+breakpoint_type",
+               file.path(results_dir, "coxph_imaging_nonbraf_efs_add_resection_cluster_breakpoint_type.RDS"),
+               "multivariate",
+               years_col = "EFS_years", status_col = "EFS_status"
+              )
+
+anova(readRDS(file.path(results_dir, "coxph_imaging_nonbraf_efs_add_resection_cluster_breakpoint_type.RDS")))
+
+plotForest(readRDS(file.path(results_dir, "coxph_imaging_nonbraf_efs_add_resection_cluster_breakpoint_type.RDS")))
+
+ggsave(file.path(plot_dir, "imaging_forest_efs_braf_add_resection_cluster_type.pdf"),
+       width = 7.5, height = 3)
+```
+
+```{r}
+
+braf_model_efs <- fit_save_model(image_clusters[grepl("KIAA1549::BRAF", image_clusters$mol_sub_group),],
+                                    terms = "extent_of_tumor_resection_x+imaging_cluster+breakpoint_group",
+               file.path(results_dir, "coxph_imaging_nonbraf_efs_add_resection_cluster_breakpoint_group.RDS"),
+               "multivariate",
+               years_col = "EFS_years", status_col = "EFS_status"
+              )
+
+anova(readRDS(file.path(results_dir, "coxph_imaging_nonbraf_efs_add_resection_cluster_breakpoint_group.RDS")))
+
+plotForest(readRDS(file.path(results_dir, "coxph_imaging_nonbraf_efs_add_resection_cluster_breakpoint_group.RDS")))
+
+ggsave(file.path(plot_dir, "imaging_forest_efs_braf_add_resection_cluster_group.pdf"),
+       width = 7.5, height = 3)
+
+```
+Plot survival by molecular subtype
+
+```{r}
+kap_efs_subtype <- survival_analysis(
+  metadata  = image_clusters,
+  ind_var = "mol_sub_group",
+  test = "kap.meier",
+  metadata_sample_col = "cohort_participant_id", 
+  days_col = "EFS_days",
+  status_col = "EFS_status"
+  )
+
+km_plot_subtype <- plotKM(model = kap_efs_subtype,
+                    variable = "mol_sub_group",
+                    combined = F, 
+                    title = "Event-free survival by molecular subtype")
+
+km_plot_subtype
+
+ggsave(file.path(plot_dir, "km_efs_imaging_braf_molecular_subtype.pdf"),
+       width = 11, height = 5)
+```
+
+```{r}
+sessionInfo()
+```
+
+

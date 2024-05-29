@@ -1,0 +1,202 @@
+SubjectID,Imaging Cluster Assignment,Cohort,legal_sex_x,race_x,Days_at_Imaging_y,age_at_event_days.1_y,cancer_predisposition_x,extent_of_tumor_resection_x,chemotherapy_x,radiation_x,consolidated_tumor_locations,overall_survival_y,event_free_survival_y,progressed?
+C1003557,3,Discovery,Male,White,2299,2321,None documented,Biopsy only,Yes,No,Cerebellar,1689,856,y
+C1026189,3,Discovery,Female,White,1894,1895,None documented,Biopsy only,Yes,No,Suprasellar,1228,1228,n
+C1026558,2,Replicate,Female,White,4971,4989,None documented,Biopsy only,Yes,No,Basal Ganglia,1851,1851,n
+C1031970,1,Replicate,Male,Other/Unavailable/Not Reported,225,226,None documented,Partial resection,No,No,Cerebellar,2385,158,y
+C1032462,1,Discovery,Male,Other/Unavailable/Not Reported,1161,1162,None documented,Gross/Near total resection,No,No,Thalamus,636,636,n
+C1046730,1,Discovery,Male,White,2384,2386,None documented,Biopsy only,Yes,No,Cerebellar,1822,463,y
+C1060998,3,Discovery,Male,Asian,6312,6338,None documented,Gross/Near total resection,No,No,Cerebellar,90,90,n
+C1064934,3,Discovery,Male,White,4546,4587,None documented,Gross/Near total resection,No,No,Lobar,1731,1731,n
+C1072314,2,Replicate,Female,White,305,308,None documented,Biopsy only,Yes,No,Lobar ,1733,1192,y
+C1077357,2,Discovery,Male,White,3034,3404,None documented,Partial resection,Yes,No,Multifocal,1787,1787,n
+C1077480,1,Replicate,Male,Other/Unavailable/Not Reported,4062,4067,None documented,Biopsy only,Yes,Yes,Multifocal,304,214,y
+C114759,3,Discovery,Male,White,551,553,None documented,Biopsy only,Yes,No,Suprasellar,3420,1635,y
+C1152018,3,Discovery,Female,Other/Unavailable/Not Reported,5241,5243,None documented,Partial resection,Yes,No,Suprasellar,1889,482,y
+C115251,3,Discovery,Male,Other/Unavailable/Not Reported,5801,5804,None documented,Partial resection,No,No,Brainstem,1698,626,y
+C1152633,1,Discovery,Male,Black or African American,1804,1805,None documented,Gross/Near total resection,No,No,Cerebellar,291,291,n
+C116850,3,Discovery,Male,Other/Unavailable/Not Reported,624,623,None documented,Partial resection,Yes,No,Optic Pathway,2364,569,y
+C1173297,1,Replicate,Male,White,4936,4937,None documented,Gross/Near total resection,No,No,Cerebellar,921,921,n
+C1173420,2,Discovery,Male,White,693,696,None documented,Partial resection,No,No,Cerebellar,839,117,y
+C1198758,1,Discovery,Female,Black or African American,2227,2228,None documented,Gross/Near total resection,No,No,Cerebellar,544,544,n
+C1198881,1,Discovery,Female,Black or African American,1994,1995,None documented,Gross/Near total resection,No,No,Cerebellar,115,115,n
+C1199004,1,Discovery,Male,White,3408,3409,None documented,Gross/Near total resection,No,No,Cerebellar,1888,1888,n
+C121524,1,Discovery,Male,White,1388,1391,None documented,Gross/Near total resection,No,No,Cerebellar,1974,1974,n
+C1248081,1,Discovery,Male,White,1176,1179,"Neurofibromatosis, Type 1 (NF-1)",Gross/Near total resection,Yes,No,Multifocal,1828,1828,n
+C1264686,2,Discovery,Female,White,4286,4316,None documented,Gross/Near total resection,No,No,Lobar,1423,1423,n
+C127182,1,Discovery,Female,Other/Unavailable/Not Reported,4439,4438,None documented,Gross/Near total resection,No,No,Cerebellar,3043,3043,n
+C1277724,3,Discovery,Female,White,4762,4763,None documented,Partial resection,No,No,Brainstem,1648,332,y
+C136284,3,Discovery,Male,White,5739,5738,None documented,Gross/Near total resection,No,No,Cerebellar,286,286,n
+C136530,3,Discovery,Female,Black or African American,792,796,None documented,Partial resection,Yes,No,Suprasellar,3279,548,y
+C140097,1,Discovery,Female,Black or African American,4258,4261,None documented,Biopsy only,No,Yes,Multifocal,1863,234,y
+C140466,3,Discovery,Male,White,5531,5531,None documented,Not Applicable,Yes,No,Optic Pathway,2911,231,y
+C154980,2,Discovery,Male,White,3357,3377,None documented,Biopsy only,No,Yes,Brainstem,2615,2615,n
+C16851,3,Replicate,Female,White,471,472,None documented,Partial resection,No,No,Suprasellar,5113,115,y
+C17712,1,Discovery,Female,White,5858,5859,None documented,Partial resection,Yes,Yes,Cerebellar,3011,202,y
+C17835,3,Discovery,Female,White,128,129,None documented,Partial resection,Yes,No,Suprasellar,5435,613,y
+C18204,3,Replicate,Female,Other/Unavailable/Not Reported,476,480,None documented,Partial resection,Yes,No,Suprasellar,3861,864,y
+C182655,1,Replicate,Female,White,1817,1818,None documented,Gross/Near total resection,No,No,Cerebellar,1932,1932,n
+C18327,1,Discovery,Female,White,2591,2595,None documented,Partial resection,No,No,Lobar,3933,695,y
+C186714,2,Replicate,Female,White,2960,2964,None documented,Gross/Near total resection,No,No,Lobar,928,928,n
+C186960,3,Discovery,Female,Black or African American,4270,4271,None documented,Partial resection,No,No,Optic Pathway,2136,409,y
+C19065,2,Replicate,Male,White,6225,6259,None documented,Gross/Near total resection,No,No,Lobar,2885,2885,n
+C19557,2,Discovery,Female,White,701,752,None documented,Gross/Near total resection,No,No,Cerebellar,3745,3745,n
+C19680,3,Discovery,Female,Black or African American,3997,4019,None documented,Partial resection,No,No,Lobar,2446,2446,n
+C216234,3,Discovery,Male,Black or African American,5208,5221,None documented,Biopsy only,Yes,No,Suprasellar,1051,1051,n
+C22509,2,Discovery,Male,White,1468,1469,None documented,Gross/Near total resection,No,No,Cerebellar,3736,3736,n
+C230871,1,Discovery,Female,White,5212,5213,None documented,Gross/Near total resection,No,No,Cerebellar,770,770,n
+C231240,2,Discovery,Male,White,1517,1536,None documented,Biopsy only,No,Yes,Brainstem,1083,1083,n
+C2321994,3,Discovery,Female,Black or African American,6090,6110,None documented,Partial resection,No,No,Cerebellar,1098,1098,n
+C2334786,1,Discovery,Female,White,831,831,None documented,Gross/Near total resection,No,No,Cerebellar,1813,1813,n
+C2345856,1,Replicate,Female,White,1115,1120,None documented,Partial resection,Yes,No,Thalamus,1705,753,y
+C23493,2,Discovery,Male,White,3799,3802,None documented,Biopsy only,No,Yes,Tectum,4110,471,y
+C23616,2,Replicate,Female,White,4257,4259,None documented,Biopsy only,No,No,Multifocal,3786,584,y
+C23862,3,Discovery,Male,Black or African American,3469,3472,None documented,Gross/Near total resection,No,No,Lobar,536,536,n
+C2409078,1,Discovery,Male,White,4233,4232,None documented,Partial resection,Yes,No,Optic Pathway,1351,1351,n
+C2421501,1,Discovery,Female,White,4204,4205,None documented,Gross/Near total resection,No,No,Cerebellar,1421,1421,n
+C2421747,2,Replicate,Female,White,4560,4563,None documented,Gross/Near total resection,No,No,Cerebellar,1022,1022,n
+C2439951,3,Discovery,Female,Black or African American,6222,6225,None documented,Gross/Near total resection,No,No,Lobar,1174,1174,n
+C244032,2,Discovery,Male,White,5480,5524,None documented,Gross/Near total resection,No,No,Lobar,1921,1921,n
+C245631,3,Discovery,Female,Other/Unavailable/Not Reported,1065,1069,None documented,Partial resection,No,No,Thalamus,1612,1612,n
+C2466519,1,Replicate,Male,White,4104,4107,None documented,Gross/Near total resection,No,No,Cerebellar,1838,1838,n
+C2479803,2,Discovery,Female,Other/Unavailable/Not Reported,6042,6043,None documented,Biopsy only,Yes,No,Suprasellar,1327,196,y
+C24969,2,Discovery,Female,White,2611,2616,None documented,Gross/Near total resection,No,No,Cerebellar,441,441,n
+C2501082,1,Replicate,Female,White,2501,2501,None documented,Partial resection,Yes,No,Suprasellar,1546,1155,y
+C2536629,1,Discovery,Male,White,5081,5081,None documented,Gross/Near total resection,No,No,Cerebellar,773,773,n
+C2578326,2,Discovery,Male,White,3834,3838,None documented,Gross/Near total resection,No,No,Lobar,1379,245,y
+C2617194,2,Discovery,Female,White,5351,5356,None documented,Biopsy only,Yes,Yes,Multifocal,1047,1047,n
+C262605,1,Replicate,Female,White,777,779,None documented,Gross/Near total resection,No,No,Cerebellar,762,762,n
+C26322,3,Discovery,Male,White,2459,2456,None documented,Biopsy only,Yes,Yes,Brainstem,282,282,n
+C2647698,2,Discovery,Male,Other/Unavailable/Not Reported,3341,3341,None documented,Not Applicable,Yes,No,Optic Pathway,1562,203,y
+C2688165,1,Discovery,Female,Black or African American,2277,2277,None documented,Gross/Near total resection,No,No,Cerebellar,1065,1065,n
+C2697882,1,Discovery,Male,White,5456,5457,None documented,Gross/Near total resection,No,No,Cerebellar,1372,660,y
+C2720022,2,Discovery,Male,White,2682,2710,None documented,Gross/Near total resection,No,No,Lobar,1020,1020,n
+C2734290,1,Discovery,Male,White,1791,1793,None documented,Partial resection,Yes,No,Suprasellar,721,721,n
+C2734536,2,Discovery,Male,White,996,1013,None documented,Gross/Near total resection,No,No,Lobar,1211,841,y
+C2760612,1,Discovery,Female,Other/Unavailable/Not Reported,1436,1442,None documented,Partial resection,No,No,Multifocal,1303,515,y
+C2760858,1,Discovery,Male,White,2075,2077,None documented,Gross/Near total resection,No,No,Cerebellar,727,727,n
+C27675,3,Discovery,Female,White,4997,5017,None documented,Partial resection,Yes,No,Suprasellar,2172,2172,n
+C27798,2,Discovery,Male,White,4452,4457,None documented,Gross/Near total resection,No,No,Cerebellar,1504,1504,n
+C2795544,2,Discovery,Male,Black or African American,1315,1372,None documented,Gross/Near total resection,No,No,Cerebellar,587,587,n
+C2819652,2,Discovery,Male,White,3450,3463,None documented,Partial resection,No,No,Cerebellar,286,286,n
+C2820021,3,Discovery,Female,White,5770,5789,None documented,Partial resection,Yes,No,Suprasellar,1177,632,y
+C2837733,1,Discovery,Male,White,4051,4052,None documented,Gross/Near total resection,No,No,Cerebellar,1105,921,y
+C28536,1,Discovery,Male,White,834,835,None documented,Partial resection,No,No,Suprasellar,6593,199,y
+C2859135,1,Discovery,Male,White,2167,2192,None documented,Gross/Near total resection,No,No,Lobar,1083,1083,n
+C2864670,1,Discovery,Female,Black or African American,2161,2162,None documented,Partial resection,No,No,Cerebellar,1042,907,y
+C28659,2,Replicate,Male,White,4266,4334,None documented,Gross/Near total resection,No,No,Cerebellar,968,968,n
+C29397,1,Discovery,Male,Other/Unavailable/Not Reported,3353,3354,None documented,Gross/Near total resection,No,No,Cerebellar,1145,1145,n
+C311190,3,Discovery,Female,White,4629,4633,None documented,Gross/Near total resection,No,No,Lobar,1791,1791,n
+C311436,3,Discovery,Male,White,4510,4513,None documented,Gross/Near total resection,No,No,Cerebellar,1257,1257,n
+C311559,1,Discovery,Male,White,7149,7149,None documented,Gross/Near total resection,No,No,Cerebellar,783,783,n
+C3185577,2,Replicate,Female,White,4255,4256,None documented,Partial resection,No,No,Brainstem,894,134,y
+C324351,2,Discovery,Female,White,1569,1569,"Neurofibromatosis, Type 1 (NF-1)",Not Applicable,No,No,Multifocal,4317,404,y
+C3365895,2,Discovery,Female,White,1167,1170,None documented,Biopsy only,Yes,No,Brainstem,711,711,n
+C3406485,1,Discovery,Male,Other/Unavailable/Not Reported,2125,2127,None documented,Gross/Near total resection,No,No,Cerebellar,728,728,n
+C3409191,3,Discovery,Female,Other/Unavailable/Not Reported,3232,3236,None documented,Gross/Near total resection,No,No,Cerebellar,519,519,n
+C3418785,1,Discovery,Female,White,3011,3012,None documented,Partial resection,No,No,Cerebellar,203,203,n
+C3513003,1,Discovery,Male,White,5500,5501,None documented,Gross/Near total resection,No,No,Cerebellar,699,699,n
+C3557160,3,Replicate,Male,White,1849,2145,None documented,Partial resection,No,No,Optic Pathway,4535,4001,y
+C35670,3,Replicate,Male,Black or African American,6284,6286,None documented,Gross/Near total resection,No,No,Cerebellar,379,379,n
+C35916,1,Discovery,Female,White,2395,2396,None documented,Gross/Near total resection,No,No,Cerebellar,483,483,n
+C3615216,3,Discovery,Female,Asian,4140,4146,None documented,Gross/Near total resection,No,No,Lobar,104,104,n
+C3686925,3,Discovery,Female,White,3762,3763,None documented,Gross/Near total resection,No,No,Cerebellar,222,222,n
+C37269,3,Discovery,Male,White,8381,8384,None documented,Partial resection,No,Yes,Lobar,1125,1125,n
+C3732558,1,Discovery,Female,White,3096,3098,None documented,Gross/Near total resection,No,No,Cerebellar,454,454,n
+C37638,1,Discovery,Male,White,1932,1933,None documented,Gross/Near total resection,No,No,Cerebellar,1100,1100,n
+C377733,1,Discovery,Male,White,2198,2200,"Neurofibromatosis, Type 1 (NF-1)",Partial resection,Yes,No,Thalamus,5339,2504,y
+C3832065,3,Replicate,Female,White,2374,2376,None documented,Partial resection,No,No,Tectum,295,295,n
+C3860478,3,Discovery,Male,White,2886,2905,None documented,Gross/Near total resection,No,No,Lobar,286,286,n
+C387327,2,Discovery,Male,White,202,203,None documented,Partial resection,Yes,No,Brainstem,1819,1819,n
+C3879666,2,Discovery,Female,White,4350,4352,None documented,Gross/Near total resection,No,No,Cerebellar,90,90,n
+C38991,1,Discovery,Male,White,3916,3917,None documented,Partial resection,No,No,Cerebellar,1482,1482,n
+C393477,1,Replicate,Female,White,5065,5083,None documented,Gross/Near total resection,No,No,Lobar,1756,1756,n
+C39483,2,Discovery,Male,White,8397,8422,None documented,Gross/Near total resection,No,No,Lobar,315,315,n
+C39606,2,Discovery,Male,White,1345,1389,None documented,Gross/Near total resection,No,No,Lobar,1686,1686,n
+C3980034,1,Discovery,Male,White,6558,6559,None documented,Partial resection,Yes,No,Thalamus,166,166,n
+C401964,3,Replicate,Male,Asian,710,736,"Neurofibromatosis, Type 1 (NF-1)",Biopsy only,Yes,No,Optic Pathway,2737,1682,y
+C4092579,1,Discovery,Female,White,4110,4113,None documented,Gross/Near total resection,Yes,No,Brainstem,150,150,n
+C41082,2,Discovery,Male,Other/Unavailable/Not Reported,1475,1683,"Tuberous Sclerosis (TSC1, TSC2)",Gross/Near total resection,No,No,Intraventricular,334,334,n
+C41574,1,Discovery,Male,White,3293,3295,None documented,Gross/Near total resection,No,No,Cerebellar,601,601,n
+C428532,3,Replicate,Female,Asian,4432,4436,None documented,Partial resection,No,No,Suprasellar,3353,3353,n
+C429393,2,Discovery,Female,Black or African American,2336,2634,None documented,Gross/Near total resection,No,No,Lobar,1436,1436,n
+C429639,3,Replicate,Male,White,4528,4529,"Tuberous Sclerosis (TSC1, TSC2)",Gross/Near total resection,No,No,Intraventricular,1099,1099,n
+C429762,1,Discovery,Male,White,2497,2500,None documented,Gross/Near total resection,No,No,Cerebellar,3376,3376,n
+C440832,3,Discovery,Female,White,6225,6236,None documented,Gross/Near total resection,No,No,Multifocal,556,556,n
+C46371,1,Replicate,Male,White,2417,2419,None documented,Partial resection,No,No,Cerebellar,2596,180,y
+C46617,3,Discovery,Female,White,2854,2857,None documented,Gross/Near total resection,No,No,Cerebellar,3483,3483,n
+C48093,2,Replicate,Male,White,2091,2093,None documented,Gross/Near total resection,No,No,Lobar,634,634,n
+C49200,3,Discovery,Female,Other/Unavailable/Not Reported,2120,2120,None documented,Gross/Near total resection,No,No,Cerebellar,3637,3637,n
+C50676,3,Discovery,Female,White,827,832,None documented,Partial resection,Yes,No,Brainstem,5808,85,y
+C51045,3,Discovery,Male,White,1858,1896,None documented,Gross/Near total resection,No,No,Tectum,524,524,n
+C51291,2,Discovery,Male,White,5827,5830,None documented,Partial resection,No,No,Tectum,3415,3415,n
+C51660,1,Discovery,Male,White,4163,4164,None documented,Gross/Near total resection,No,No,Thalamus,3070,3070,n
+C52029,3,Replicate,Female,White,3339,3340,None documented,Gross/Near total resection,No,No,Cerebellar,1980,1980,n
+C52521,1,Discovery,Male,White,852,853,None documented,Gross/Near total resection,No,No,Cerebellar,1902,1902,n
+C53505,2,Discovery,Female,White,3877,3924,None documented,Partial resection,No,No,Basal Ganglia,2918,2211,y
+C53874,3,Discovery,Female,White,2861,2868,None documented,Biopsy only,Yes,No,Suprasellar,1287,250,y
+C58056,3,Discovery,Female,Other/Unavailable/Not Reported,1854,1857,None documented,Gross/Near total resection,No,No,Cerebellar,2876,2876,n
+C58179,1,Discovery,Female,Black or African American,4213,4216,None documented,Gross/Near total resection,No,No,Cerebellar,739,739,n
+C58671,3,Discovery,Female,White,6513,6524,None documented,Gross/Near total resection,No,No,Lobar,356,356,n
+C59409,3,Discovery,Female,White,6285,6287,None documented,Gross/Near total resection,No,No,Lobar,2316,2316,n
+C59532,1,Discovery,Male,White,2477,2480,None documented,Gross/Near total resection,No,No,Cerebellar,2866,799,y
+C60270,1,Discovery,Male,White,425,428,None documented,Partial resection,No,No,Thalamus,3490,595,y
+C623856,1,Discovery,Female,White,3600,3602,None documented,Gross/Near total resection,No,No,Cerebellar,1959,1959,n
+C62607,1,Replicate,Female,White,470,472,None documented,Gross/Near total resection,No,No,Thalamus,3812,3812,n
+C62976,3,Discovery,Female,Black or African American,3692,3793,None documented,Gross/Near total resection,No,No,Lobar,246,246,n
+C63099,2,Discovery,Female,White,3406,3445,"Neurofibromatosis, Type 1 (NF-1)",Gross/Near total resection,No,No,Lobar,759,759,n
+C650178,3,Discovery,Male,White,802,809,None documented,Gross/Near total resection,No,No,Lobar,1847,1847,n
+C657927,3,Replicate,Male,White,6625,6625,None documented,Biopsy only,No,No,Lobar,1787,1787,n
+C663093,1,Discovery,Male,White,1666,1667,None documented,Partial resection,Yes,No,Optic Pathway,2602,1371,y
+C663339,2,Discovery,Female,White,7074,7247,None documented,Gross/Near total resection,No,No,Lobar,1148,1148,n
+C663585,3,Replicate,Male,White,3741,3747,None documented,Gross/Near total resection,No,No,Lobar,1758,1758,n
+C66420,3,Discovery,Male,White,1293,1277,"Neurofibromatosis, Type 1 (NF-1)",Not Applicable,Yes,No,Multifocal,1066,578,y
+C68388,1,Replicate,Male,White,2746,2750,None documented,Gross/Near total resection,No,No,Lobar,3149,3149,n
+C68634,1,Discovery,Female,White,1175,1178,None documented,Gross/Near total resection,No,No,Cerebellar,1523,1523,n
+C699624,1,Replicate,Male,White,1435,1436,None documented,Gross/Near total resection,No,No,Cerebellar,1893,1893,n
+C70602,1,Discovery,Female,White,4415,4417,None documented,Gross/Near total resection,No,No,Cerebellar,3328,3328,n
+C713892,3,Discovery,Male,Black or African American,1954,1957,None documented,Gross/Near total resection,No,No,Lobar,1877,1877,n
+C719919,3,Discovery,Male,White,4253,4254,None documented,Biopsy only,Yes,No,Thalamus,1650,1650,n
+C720165,1,Discovery,Female,Asian,4324,4326,None documented,Gross/Near total resection,No,No,Cerebellar,421,421,n
+C72324,1,Replicate,Male,White,2476,2478,None documented,Gross/Near total resection,No,No,Cerebellar,1138,1138,n
+C72939,3,Discovery,Male,White,2085,2099,None documented,Biopsy only,Yes,No,Suprasellar,3292,3292,n
+C734556,3,Discovery,Male,White,1422,1426,None documented,Partial resection,Yes,No,Suprasellar,2058,646,y
+C734679,1,Discovery,Female,White,5376,5381,None documented,Gross/Near total resection,No,No,Lobar,1093,1093,n
+C735540,3,Discovery,Female,White,4275,4275,None documented,Not Applicable,No,No,Lobar,3038,665,y
+C736401,1,Discovery,Male,White,994,996,None documented,Partial resection,No,No,Brainstem,1868,1868,n
+C744888,2,Replicate,Male,White,3999,3998,None documented,Gross/Near total resection,No,No,Cerebellar,1854,1854,n
+C75276,1,Replicate,Male,White,795,796,None documented,Gross/Near total resection,No,No,Cerebellar,2931,222,y
+C75522,2,Discovery,Female,White,4912,4938,None documented,Gross/Near total resection,No,No,Lobar,2410,2410,n
+C75768,3,Discovery,Male,White,5665,5666,None documented,Partial resection,Yes,No,Suprasellar,112,112,n
+C77367,1,Replicate,Male,White,3869,3870,None documented,Gross/Near total resection,No,No,Cerebellar,772,772,n
+C77490,2,Discovery,Female,White,4266,4458,None documented,Partial resection,No,No,Lobar,2800,1497,y
+C77613,3,Discovery,Female,White,241,245,None documented,Biopsy only,Yes,No,Suprasellar,7504,146,y
+C78966,1,Discovery,Female,White,636,637,None documented,Partial resection,No,No,Cerebellar,1522,1522,n
+C80565,3,Replicate,Female,Black or African American,2097,2096,None documented,Partial resection,No,Yes,Brainstem,1812,1812,n
+C806019,3,Replicate,Female,Other/Unavailable/Not Reported,207,210,None documented,Partial resection,Yes,No,Suprasellar,2498,351,y
+C808110,3,Discovery,Female,White,3763,3765,None documented,Gross/Near total resection,No,No,Cerebellar,1368,1368,n
+C808233,3,Discovery,Male,White,1026,1038,None documented,Partial resection,Yes,No,Suprasellar,1997,934,y
+C809340,2,Discovery,Female,Other/Unavailable/Not Reported,498,498,None documented,Biopsy only,No,No,Tectum,91,91,n
+C818688,1,Discovery,Female,Other/Unavailable/Not Reported,1610,1612,None documented,Gross/Near total resection,No,No,Cerebellar,391,391,n
+C829266,1,Discovery,Female,White,978,978,None documented,Gross/Near total resection,No,No,Cerebellar,2096,367,y
+C829512,1,Replicate,Female,White,4931,4932,None documented,Gross/Near total resection,No,No,Cerebellar,1680,1680,n
+C83640,2,Discovery,Male,White,3058,3153,"Neurofibromatosis, Type 1 (NF-1)",Biopsy only,Yes,No,Multifocal,3482,2275,y
+C857679,1,Discovery,Male,Black or African American,1276,1279,None documented,Partial resection,No,No,Cerebellar,206,206,n
+C85977,2,Discovery,Female,White,4739,4751,"Neurofibromatosis, Type 1 (NF-1)",Biopsy only,No,No,Multifocal,180,180,n
+C868872,1,Replicate,Female,Other/Unavailable/Not Reported,3098,3106,None documented,Gross/Near total resection,No,No,Cerebellar,1724,1724,n
+C871578,2,Discovery,Female,White,6324,6344,None documented,Gross/Near total resection,No,No,Lobar,1386,1386,n
+C880926,2,Discovery,Female,White,2233,2234,None documented,Gross/Near total resection,No,No,Intraventricular,1006,1006,n
+C883509,2,Discovery,Male,White,4297,4297,None documented,Not Applicable,No,No,Cerebellar,3449,379,y
+C883755,1,Discovery,Female,White,4361,4361,None documented,Gross/Near total resection,No,No,Cerebellar,1438,1438,n
+C88683,1,Discovery,Male,American Indian or Alaska Native,1357,1359,None documented,Partial resection,No,No,Cerebellar,2866,358,y
+C90159,3,Discovery,Male,Black or African American,2220,2223,None documented,Partial resection,No,No,Suprasellar,2947,1499,y
+C90405,3,Discovery,Male,Other/Unavailable/Not Reported,4657,4667,None documented,Gross/Near total resection,No,No,Intraventricular,1800,1800,n
+C90528,1,Discovery,Female,Black or African American,2209,2211,None documented,Partial resection,No,No,Cerebellar,3264,3264,n
+C907371,3,Discovery,Male,White,4476,4482,None documented,Gross/Near total resection,No,No,Lobar,1831,1831,n
+C907617,3,Discovery,Male,White,3446,3450,None documented,Partial resection,No,No,Lobar,2666,90,y
+C916719,3,Discovery,Male,White,4381,4382,None documented,Biopsy only,No,No,Suprasellar,1610,1610,n
+C949683,3,Discovery,Female,White,5382,5406,None documented,Gross/Near total resection,No,No,Basal Ganglia,1687,1687,n
+C96186,3,Discovery,Female,White,5390,5399,None documented,Partial resection,Yes,No,Suprasellar,1000,1000,n
+C972192,2,Discovery,Male,White,1923,1923,None documented,Not Applicable,No,No,Cerebellar,3473,3185,y
+C972684,2,Discovery,Female,White,3228,3242,None documented,Gross/Near total resection,No,No,Cerebellar,374,374,n
+C98031,2,Discovery,Male,White,5257,5262,None documented,Partial resection,No,No,Cerebellar,3323,3323,n
+C98154,1,Discovery,Male,White,3824,3826,None documented,Gross/Near total resection,No,No,Cerebellar,3344,3344,n
