@@ -2,21 +2,26 @@
 
 This repository includes codes relevant to each radiomic analysis project.  
 
-### Badges
+### To reproduce the code in this repository
 
-Update the LICENSE badge to point to the new repo location on GitHub.
-Note that the LICENSE badge will fail to render correctly unless the repo has
-been set to **public**.
+1. Clone the repository:
+```
+git clone git@github.com:d3b-center/TIRU_radiomic_analysis.git
+```
 
-Add additional badges for CI, docs, and other integrations as needed within the
-`<p>` tag next to the LICENSE.
+2. Pull Docker container:
+```
+docker pull pgc-images.sbgenomics.com/corbettr/tiru-radiomics:latest
+```
 
-### Repo Description
+3. Start the Docker container; from the `TIRU_radiomic_analysis` folder, run:
+```
+docker run --name <CONTAINER_NAME> -d -e PASSWORD=pass -p 8787:8787 -v $PWD:/home/rstudio/TIRU_radiomic_analysis pgc-images.sbgenomics.com/corbettr/tiru-radiomics:latest
+```
 
-Update the repositories description with a short summary of the repository's
-intent.
-Include an appropriate emoji at the start of the summary.
+NOTE: if using a Macbook with M1 chip, add the option `--platform linux/amd64` to above code
 
-Add a handful of tags that summarize topics relating to the repository.
-If the repo has a documentation site or webpage, add it next to the repository
-description.
+4. Execute the shell within the docker image; from the `TIRU_radiomic_analysis` folder, run: 
+```
+docker exec -ti <CONTAINER_NAME> bash
+```
