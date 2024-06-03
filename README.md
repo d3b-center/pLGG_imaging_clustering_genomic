@@ -2,7 +2,7 @@
 
 This repository includes codes relevant to each radiomic analysis project.  
 
-### To reproduce the code in this repository
+### To reproduce the code in the `braf-fusions` module of this repository
 
 1. Clone the repository:
 ```
