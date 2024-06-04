@@ -91,7 +91,8 @@ image_clusters <- image_clusters %>%
     breakpoint_group == "15:9" ~ "15:09",
     breakpoint_group == "16:9" ~ "16:09",
     TRUE ~ breakpoint_group
-  ))
+  )) %>%
+  write_tsv(file.path(results_dir, "imaging-clustering-cohort-subtype-survival.tsv"))
 ```
 
 Frequency of molecular subtypes in imaging clusters
