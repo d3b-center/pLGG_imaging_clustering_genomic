@@ -1,6 +1,6 @@
-# D3b TIRU Radiomic Analysis Repository
+# Repository for the imaging clustering paper
 
-This repository includes codes relevant to each radiomic analysis project.  
+This repository includes codes relevant to the imaging clustering paper  
 
 ### To reproduce the code in the `braf-fusions` module of this repository
 
