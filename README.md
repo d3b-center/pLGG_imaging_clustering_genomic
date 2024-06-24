@@ -9,11 +9,7 @@ This repository includes codes relevant to the manuscript "Imaging Clusters of P
 ## Imaging Clustering
 ### Software Requirements
 - CaPTk, v1.8.1 (https://cbica.github.io/CaPTk/)
-- Python3 
-- R v4.3
-- MATLAB 2023A (v23.2)
-  - Parallel Computing Toolbox
-  - Statistics and Machine Learning Toolbox
+- Python3
 
 ### Hardware Used for this Study
 - CUBIC (HPC Cluster) (https://www.med.upenn.edu/cbica/cubic.html)
