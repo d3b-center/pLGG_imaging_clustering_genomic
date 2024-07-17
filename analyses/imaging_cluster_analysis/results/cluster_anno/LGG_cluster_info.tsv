@@ -1,0 +1,173 @@
+Kids_First_Biospecimen_ID	cohort_participant_id	sample_id	experimental_strategy	pathology_diagnosis	cancer_group	short_histology	broad_histology	cluster_assigned	cohort	molecular_subtype
+BS_014EVM2D	C75522	7316-362	RNA-Seq	low-grade glioma/astrocytoma (who grade i/ii)	low-grade glioma/astrocytoma	LGAT	Low-grade astrocytic tumor	2	Discovery	LGG, other MAPK
+BS_02NZT8CE	C324351	7316-1745	RNA-Seq	low-grade glioma/astrocytoma (who grade i/ii)	low-grade glioma/astrocytoma	LGAT	Low-grade astrocytic tumor	2	Discovery	LGG_NF1
+BS_044XZ8ST	C907617	7316-3570	RNA-Seq	low-grade glioma/astrocytoma (who grade i/ii)	low-grade glioma/astrocytoma	LGAT	Low-grade astrocytic tumor	3	Discovery	LGG, other MAPK
+BS_0T17SY47	C39483	7316-183	RNA-Seq	low-grade glioma/astrocytoma (who grade i/ii)	low-grade glioma/astrocytoma	LGAT	Low-grade astrocytic tumor	2	Discovery	LGG_IDH
+BS_0WVJYM9R	C77367	7316-370	RNA-Seq	low-grade glioma/astrocytoma (who grade i/ii)	low-grade glioma/astrocytoma	LGAT	Low-grade astrocytic tumor	1	Replicate	LGG, KIAA1549-BRAF
+BS_0X9EGHY2	C311190	7316-1744	RNA-Seq	low-grade glioma/astrocytoma (who grade i/ii)	low-grade glioma/astrocytoma	LGAT	Low-grade astrocytic tumor	3	Discovery	LGG, other MAPK
+BS_130PVKA7	C949683	7316-3564	RNA-Seq	low-grade glioma/astrocytoma (who grade i/ii)	low-grade glioma/astrocytoma	LGAT	Low-grade astrocytic tumor	3	Discovery	LGG_NF1
+BS_13YRZN4R	C28536	7316-6786	RNA-Seq	low-grade glioma/astrocytoma (who grade i/ii)	low-grade glioma/astrocytoma	LGAT	Low-grade astrocytic tumor	1	Discovery	LGG, wildtype
+BS_16KA9ZAW	C2647698	7316-8723	RNA-Seq	low-grade glioma/astrocytoma (who grade i/ii)	low-grade glioma/astrocytoma	LGAT	Low-grade astrocytic tumor	2	Discovery	LGG_RTK
+BS_17WYVEEC	C68634	7316-332	RNA-Seq	low-grade glioma/astrocytoma (who grade i/ii)	low-grade glioma/astrocytoma	LGAT	Low-grade astrocytic tumor	1	Discovery	LGG, KIAA1549-BRAF
+BS_1HYS8CSC	C3513003	7316-7961	RNA-Seq	low-grade glioma/astrocytoma (who grade i/ii)	low-grade glioma/astrocytoma	LGAT	Low-grade astrocytic tumor	1	Discovery	LGG, KIAA1549-BRAF
+BS_1RXZ3BP7	C90159	7316-898	RNA-Seq	low-grade glioma/astrocytoma (who grade i/ii)	low-grade glioma/astrocytoma	LGAT	Low-grade astrocytic tumor	3	Discovery	LGG_RTK
+BS_24AHZ9ZW	C75768	7316-361	RNA-Seq	low-grade glioma/astrocytoma (who grade i/ii)	low-grade glioma/astrocytoma	LGAT	Low-grade astrocytic tumor	3	Discovery	LGG, BRAF V600E
+BS_258RRGDM	C650178	7316-2195	RNA-Seq	low-grade glioma/astrocytoma (who grade i/ii)	low-grade glioma/astrocytoma	LGAT	Low-grade astrocytic tumor	3	Discovery	LGG, wildtype
+BS_2R9TCR03	C53505	7316-2988	RNA-Seq	low-grade glioma/astrocytoma (who grade i/ii)	low-grade glioma/astrocytoma	LGAT	Low-grade astrocytic tumor	2	Discovery	LGG_RTK
+BS_2YCJV2VV	C17835	7316-235	RNA-Seq	low-grade glioma/astrocytoma (who grade i/ii)	low-grade glioma/astrocytoma	LGAT	Low-grade astrocytic tumor	3	Discovery	LGG, BRAF V600E
+BS_31KH6VS6	C871578	7316-3315	RNA-Seq	low-grade glioma/astrocytoma (who grade i/ii)	low-grade glioma/astrocytoma	LGAT	Low-grade astrocytic tumor	2	Discovery	LGG, wildtype
+BS_33AQSPRP	C734556	7316-2727	RNA-Seq	low-grade glioma/astrocytoma (who grade i/ii)	low-grade glioma/astrocytoma	LGAT	Low-grade astrocytic tumor	3	Discovery	LGG, wildtype
+BS_3G3KWY18	C428532	7316-1866	RNA-Seq	low-grade glioma/astrocytoma (who grade i/ii)	low-grade glioma/astrocytoma	LGAT	Low-grade astrocytic tumor	3	Replicate	LGG, BRAF V600E
+BS_3Q0GTSYH	C58179	7316-206	RNA-Seq	low-grade glioma/astrocytoma (who grade i/ii)	low-grade glioma/astrocytoma	LGAT	Low-grade astrocytic tumor	1	Discovery	LGG, KIAA1549-BRAF
+BS_3W07B2TG	C880926	7316-3554	RNA-Seq	low-grade glioma/astrocytoma (who grade i/ii)	low-grade glioma/astrocytoma	LGAT	Low-grade astrocytic tumor	2	Discovery	LGG_RTK
+BS_3XY76V8T	C657927	7316-2575	RNA-Seq	ganglioglioma	ganglioglioma	Ganglioglioma	Low-grade astrocytic tumor	3	Replicate	LGG, BRAF V600E
+BS_3Y2X2RBJ	C2837733	7316-7079	RNA-Seq	low-grade glioma/astrocytoma (who grade i/ii)	low-grade glioma/astrocytoma	LGAT	Low-grade astrocytic tumor	1	Discovery	LGG, KIAA1549-BRAF
+BS_401R3KV0	C51045	7316-275	RNA-Seq	low-grade glioma/astrocytoma (who grade i/ii)	low-grade glioma/astrocytoma	LGAT	Low-grade astrocytic tumor	3	Discovery	LGG, other MAPK
+BS_4BHZXDRT	C3185577	7316-9016	RNA-Seq	low-grade glioma/astrocytoma (who grade i/ii)	low-grade glioma/astrocytoma	LGAT	Low-grade astrocytic tumor	2	Replicate	LGG_RTK
+BS_4N1GNHX4	C3557160	7316-8728	RNA-Seq	low-grade glioma/astrocytoma (who grade i/ii)	low-grade glioma/astrocytoma	LGAT	Low-grade astrocytic tumor	3	Replicate	LGG_NF1
+BS_4XH092HE	C1046730	7316-4225	RNA-Seq	low-grade glioma/astrocytoma (who grade i/ii)	low-grade glioma/astrocytoma	LGAT	Low-grade astrocytic tumor	1	Discovery	LGG, BRAF V600E
+BS_4Y2JAQTS	C2578326	7316-6365	RNA-Seq	ganglioglioma	ganglioglioma	Ganglioglioma	Low-grade astrocytic tumor	2	Discovery	GNG, wildtype
+BS_4Y93HVP4	C1026189	7316-3925	RNA-Seq	low-grade glioma/astrocytoma (who grade i/ii)	low-grade glioma/astrocytoma	LGAT	Low-grade astrocytic tumor	3	Discovery	LGG, KIAA1549-BRAF
+BS_52426AMF	C262605	7316-925	RNA-Seq	low-grade glioma/astrocytoma (who grade i/ii)	low-grade glioma/astrocytoma	LGAT	Low-grade astrocytic tumor	1	Replicate	LGG, KIAA1549-BRAF
+BS_52DAPP1Y	C72324	7316-345	RNA-Seq	low-grade glioma/astrocytoma (who grade i/ii)	low-grade glioma/astrocytoma	LGAT	Low-grade astrocytic tumor	1	Replicate	LGG, KIAA1549-BRAF
+BS_53GQKVEX	C114759	7316-487	RNA-Seq	low-grade glioma/astrocytoma (who grade i/ii)	low-grade glioma/astrocytoma	LGAT	Low-grade astrocytic tumor	3	Discovery	LGG, KIAA1549-BRAF
+BS_593HEWBF	C48093	7316-261	RNA-Seq	ganglioglioma	ganglioglioma	Ganglioglioma	Low-grade astrocytic tumor	2	Replicate	GNG, other MAPK
+BS_5J5D3QTD	C3409191	7316-8112	RNA-Seq	low-grade glioma/astrocytoma (who grade i/ii)	low-grade glioma/astrocytoma	LGAT	Low-grade astrocytic tumor	3	Discovery	LGG, KIAA1549-BRAF
+BS_5NWDARXG	C19065	7316-32	RNA-Seq	low-grade glioma/astrocytoma (who grade i/ii)	low-grade glioma/astrocytoma	LGAT	Low-grade astrocytic tumor	2	Replicate	LGG, BRAF V600E
+BS_5YJEPPTP	C182655	7316-954	RNA-Seq	low-grade glioma/astrocytoma (who grade i/ii)	low-grade glioma/astrocytoma	LGAT	Low-grade astrocytic tumor	1	Replicate	LGG, KIAA1549-BRAF
+BS_63F8QR26	C2536629	7316-6363	RNA-Seq	low-grade glioma/astrocytoma (who grade i/ii)	low-grade glioma/astrocytoma	LGAT	Low-grade astrocytic tumor	1	Discovery	LGG, wildtype
+BS_66ABA973	C59532	7316-121	RNA-Seq	low-grade glioma/astrocytoma (who grade i/ii)	low-grade glioma/astrocytoma	LGAT	Low-grade astrocytic tumor	1	Discovery	LGG, KIAA1549-BRAF
+BS_6NTXGQAC	C80565	7316-395	RNA-Seq	ganglioglioma	ganglioglioma	Ganglioglioma	Low-grade astrocytic tumor	3	Replicate	GNG, wildtype
+BS_6TSAVMT9	C3832065	7316-9247	RNA-Seq	low-grade glioma/astrocytoma (who grade i/ii)	low-grade glioma/astrocytoma	LGAT	Low-grade astrocytic tumor	3	Replicate	LGG, other MAPK
+BS_775HDFNY	C972684	7316-3919	RNA-Seq	low-grade glioma/astrocytoma (who grade i/ii)	low-grade glioma/astrocytoma	LGAT	Low-grade astrocytic tumor	2	Discovery	LGG, KIAA1549-BRAF
+BS_77CDMEY4	C62607	7316-259	RNA-Seq	ganglioglioma	ganglioglioma	Ganglioglioma	Low-grade astrocytic tumor	1	Replicate	GNG, To be classified
+BS_7M3FNSYK	C1198758	7316-4736	RNA-Seq	low-grade glioma/astrocytoma (who grade i/ii)	low-grade glioma/astrocytoma	LGAT	Low-grade astrocytic tumor	1	Discovery	LGG, KIAA1549-BRAF
+BS_7XRN3CFX	C77490	7316-375	RNA-Seq	low-grade glioma/astrocytoma (who grade i/ii)	low-grade glioma/astrocytoma	LGAT	Low-grade astrocytic tumor	2	Discovery	LGG_CDKN2A/B
+BS_8SKZ7BRN	C26322	7316-93	RNA-Seq	low-grade glioma/astrocytoma (who grade i/ii)	low-grade glioma/astrocytoma	LGAT	Low-grade astrocytic tumor	3	Discovery	LGG, To be classified
+BS_8VAZSJEN	C98031	7316-459	RNA-Seq	low-grade glioma/astrocytoma (who grade i/ii)	low-grade glioma/astrocytoma	LGAT	Low-grade astrocytic tumor	2	Discovery	LGG, KIAA1549-BRAF
+BS_92HCM7BN	C2760612	7316-6776	RNA-Seq	low-grade glioma/astrocytoma (who grade i/ii)	low-grade glioma/astrocytoma	LGAT	Low-grade astrocytic tumor	1	Discovery	LGG, other MAPK
+BS_9P9MB8X8	C116850	7316-499	RNA-Seq	low-grade glioma/astrocytoma (who grade i/ii)	low-grade glioma/astrocytoma	LGAT	Low-grade astrocytic tumor	3	Discovery	LGG, BRAF V600E
+BS_9YXH2CZ0	C3732558	7316-9027	RNA-Seq	low-grade glioma/astrocytoma (who grade i/ii)	low-grade glioma/astrocytoma	LGAT	Low-grade astrocytic tumor	1	Discovery	LGG, wildtype
+BS_A13BMEF5	C699624	7316-2663	RNA-Seq	low-grade glioma/astrocytoma (who grade i/ii)	low-grade glioma/astrocytoma	LGAT	Low-grade astrocytic tumor	1	Replicate	LGG, KIAA1549-BRAF
+BS_A1VEGWTR	C115251	7316-1851	RNA-Seq	low-grade glioma/astrocytoma (who grade i/ii)	low-grade glioma/astrocytoma	LGAT	Low-grade astrocytic tumor	3	Discovery	LGG, KIAA1549-BRAF
+BS_AP0SZ364	C311436	7316-946	RNA-Seq	low-grade glioma/astrocytoma (who grade i/ii)	low-grade glioma/astrocytoma	LGAT	Low-grade astrocytic tumor	3	Discovery	LGG, other MAPK
+BS_ATHSTZ5R	C1173420	7316-4683	RNA-Seq	low-grade glioma/astrocytoma (who grade i/ii)	low-grade glioma/astrocytoma	LGAT	Low-grade astrocytic tumor	2	Discovery	LGG, KIAA1549-BRAF
+BS_AW7J9F9R	C3879666	7316-9445	RNA-Seq	low-grade glioma/astrocytoma (who grade i/ii)	low-grade glioma/astrocytoma	LGAT	Low-grade astrocytic tumor	2	Discovery	LGG, wildtype
+BS_B7X8VXQ3	C59409	7316-120	RNA-Seq	ganglioglioma	ganglioglioma	Ganglioglioma	Low-grade astrocytic tumor	3	Discovery	GNG, KIAA1549-BRAF
+BS_BAG042V5	C83640	7316-381	RNA-Seq	low-grade glioma/astrocytoma (who grade i/ii)	low-grade glioma/astrocytoma	LGAT	Low-grade astrocytic tumor	2	Discovery	LGG_RTK
+BS_BC936YNZ	C70602	7316-186	RNA-Seq	low-grade glioma/astrocytoma (who grade i/ii)	low-grade glioma/astrocytoma	LGAT	Low-grade astrocytic tumor	1	Discovery	LGG, other MAPK
+BS_BGRPWBNG	C136530	7316-7103	RNA-Seq	low-grade glioma/astrocytoma (who grade i/ii)	low-grade glioma/astrocytoma	LGAT	Low-grade astrocytic tumor	3	Discovery	LGG, KIAA1549-BRAF
+BS_BJBM0BN7	C1152633	7316-4677	RNA-Seq	low-grade glioma/astrocytoma (who grade i/ii)	low-grade glioma/astrocytoma	LGAT	Low-grade astrocytic tumor	1	Discovery	LGG, KIAA1549-BRAF
+BS_BKQZ550R	C829266	7316-3065	RNA-Seq	low-grade glioma/astrocytoma (who grade i/ii)	low-grade glioma/astrocytoma	LGAT	Low-grade astrocytic tumor	1	Discovery	LGG_RTK
+BS_BN986DF6	C75276	7316-368	RNA-Seq	low-grade glioma/astrocytoma (who grade i/ii)	low-grade glioma/astrocytoma	LGAT	Low-grade astrocytic tumor	1	Replicate	LGG, KIAA1549-BRAF
+BS_BNECCX4D	C4092579	7316-9823	RNA-Seq	low-grade glioma/astrocytoma (who grade i/ii)	low-grade glioma/astrocytoma	LGAT	Low-grade astrocytic tumor	1	Discovery	LGG, BRAF V600E
+BS_BPSTSCBJ	C868872	7316-3308	RNA-Seq	low-grade glioma/astrocytoma (who grade i/ii)	low-grade glioma/astrocytoma	LGAT	Low-grade astrocytic tumor	1	Replicate	LGG, KIAA1549-BRAF
+BS_C6SKJG3N	C972192	7316-3751	RNA-Seq	low-grade glioma/astrocytoma (who grade i/ii)	low-grade glioma/astrocytoma	LGAT	Low-grade astrocytic tumor	2	Discovery	LGG, KIAA1549-BRAF
+BS_C7A2TYAC	C136530	7316-874	RNA-Seq	low-grade glioma/astrocytoma (who grade i/ii)	low-grade glioma/astrocytoma	LGAT	Low-grade astrocytic tumor	3	Discovery	LGG, KIAA1549-BRAF
+BS_CKX8RW1J	C1026189	7316-3925	RNA-Seq	low-grade glioma/astrocytoma (who grade i/ii)	low-grade glioma/astrocytoma	LGAT	Low-grade astrocytic tumor	3	Discovery	LGG, KIAA1549-BRAF
+BS_CM14SRVX	C2734536	7316-6305	RNA-Seq	ganglioglioma	ganglioglioma	Ganglioglioma	Low-grade astrocytic tumor	2	Discovery	GNG, wildtype
+BS_CMDJJQ7K	C2479803	7316-5453	RNA-Seq	low-grade glioma/astrocytoma (who grade i/ii)	low-grade glioma/astrocytoma	LGAT	Low-grade astrocytic tumor	2	Discovery	LGG_CDKN2A/B
+BS_D1MBABN6	C140097	7316-880	RNA-Seq	low-grade glioma/astrocytoma (who grade i/ii)	low-grade glioma/astrocytoma	LGAT	Low-grade astrocytic tumor	1	Discovery	LGG_RTK
+BS_DGWXNSPK	C2720022	7316-6759	RNA-Seq	ganglioglioma	ganglioglioma	Ganglioglioma	Low-grade astrocytic tumor	2	Discovery	LGG_RTK
+BS_DPF1CX0G	C29397	7316-117	RNA-Seq	low-grade glioma/astrocytoma (who grade i/ii)	low-grade glioma/astrocytoma	LGAT	Low-grade astrocytic tumor	1	Discovery	LGG, KIAA1549-BRAF
+BS_DR5QCTVE	C1077357	7316-4429	RNA-Seq	low-grade glioma/astrocytoma (who grade i/ii)	low-grade glioma/astrocytoma	LGAT	Low-grade astrocytic tumor	2	Discovery	LGG, wildtype
+BS_DSS3S5XD	C27675	7316-247	RNA-Seq	low-grade glioma/astrocytoma (who grade i/ii)	low-grade glioma/astrocytoma	LGAT	Low-grade astrocytic tumor	3	Discovery	LGG, KIAA1549-BRAF
+BS_E1CGF3KV	C39606	7316-176	RNA-Seq	low-grade glioma/astrocytoma (who grade i/ii)	low-grade glioma/astrocytoma	LGAT	Low-grade astrocytic tumor	2	Discovery	LGG, MYB/MYBL1
+BS_E2DEWCSK	C3980034	7316-9739	RNA-Seq	low-grade glioma/astrocytoma (who grade i/ii)	low-grade glioma/astrocytoma	LGAT	Low-grade astrocytic tumor	1	Discovery	LGG, KIAA1549-BRAF
+BS_E3EJHXQV	C663585	7316-2581	RNA-Seq	low-grade glioma/astrocytoma (who grade i/ii)	low-grade glioma/astrocytoma	LGAT	Low-grade astrocytic tumor	3	Replicate	LGG_CDKN2A/B
+BS_E6DT3HPT	C2734290	7316-6764	RNA-Seq	low-grade glioma/astrocytoma (who grade i/ii)	low-grade glioma/astrocytoma	LGAT	Low-grade astrocytic tumor	1	Discovery	LGG, wildtype
+BS_EBMCTR80	C18327	7316-1845	RNA-Seq	low-grade glioma/astrocytoma (who grade i/ii)	low-grade glioma/astrocytoma	LGAT	Low-grade astrocytic tumor	1	Discovery	LGG_RTK
+BS_EFEZB0ZH	C245631	7316-924	RNA-Seq	low-grade glioma/astrocytoma (who grade i/ii)	low-grade glioma/astrocytoma	LGAT	Low-grade astrocytic tumor	3	Discovery	LGG, KIAA1549-BRAF
+BS_ERJT2RFF	C2321994	7316-5273	RNA-Seq	low-grade glioma/astrocytoma (who grade i/ii)	low-grade glioma/astrocytoma	LGAT	Low-grade astrocytic tumor	3	Discovery	LGG, BRAF V600E
+BS_F1K9QTBS	C3686925	7316-8865	RNA-Seq	low-grade glioma/astrocytoma (who grade i/ii)	low-grade glioma/astrocytoma	LGAT	Low-grade astrocytic tumor	3	Discovery	LGG, KIAA1549-BRAF
+BS_FAQQ0GCQ	C663339	7316-2571	RNA-Seq	ganglioglioma	ganglioglioma	Ganglioglioma	Low-grade astrocytic tumor	2	Discovery	LGG, BRAF V600E
+BS_FJWZ3M7V	C401964	7316-1779	RNA-Seq	low-grade glioma/astrocytoma (who grade i/ii)	low-grade glioma/astrocytoma	LGAT	Low-grade astrocytic tumor	3	Replicate	LGG_NF1
+BS_FJZPQZ2C	C77490	7316-3923	RNA-Seq	low-grade glioma/astrocytoma (who grade i/ii)	low-grade glioma/astrocytoma	LGAT	Low-grade astrocytic tumor	2	Discovery	LGG_CDKN2A/B
+BS_G5QBBHDV	C41574	7316-184	RNA-Seq	low-grade glioma/astrocytoma (who grade i/ii)	low-grade glioma/astrocytoma	LGAT	Low-grade astrocytic tumor	1	Discovery	LGG, KIAA1549-BRAF
+BS_G7AGNB5G	C27798	7316-77	RNA-Seq	low-grade glioma/astrocytoma (who grade i/ii)	low-grade glioma/astrocytoma	LGAT	Low-grade astrocytic tumor	2	Discovery	LGG_RTK
+BS_GCA4GET3	C35670	7316-162	RNA-Seq	low-grade glioma/astrocytoma (who grade i/ii)	low-grade glioma/astrocytoma	LGAT	Low-grade astrocytic tumor	3	Replicate	LGG, KIAA1549-BRAF
+BS_GHNJ4CYC	C623856	7316-2184	RNA-Seq	low-grade glioma/astrocytoma (who grade i/ii)	low-grade glioma/astrocytoma	LGAT	Low-grade astrocytic tumor	1	Discovery	LGG, KIAA1549-BRAF
+BS_GPEGRCCT	C440832	7316-934	RNA-Seq	low-grade glioma/astrocytoma (who grade i/ii)	low-grade glioma/astrocytoma	LGAT	Low-grade astrocytic tumor	3	Discovery	LGG, BRAF V600E
+BS_GWCRMKE6	C140466	7316-882	RNA-Seq	low-grade glioma/astrocytoma (who grade i/ii)	low-grade glioma/astrocytoma	LGAT	Low-grade astrocytic tumor	3	Discovery	LGG, wildtype
+BS_GYA4V1RD	C883509	7316-3556	RNA-Seq	low-grade glioma/astrocytoma (who grade i/ii)	low-grade glioma/astrocytoma	LGAT	Low-grade astrocytic tumor	2	Discovery	LGG, KIAA1549-BRAF
+BS_GYXSDZ56	C90405	7316-390	RNA-Seq	low-grade glioma/astrocytoma (who grade i/ii)	low-grade glioma/astrocytoma	LGAT	Low-grade astrocytic tumor	3	Discovery	LGG, KIAA1549-BRAF
+BS_H0TJS3RZ	C2859135	7316-7095	RNA-Seq	ganglioglioma	ganglioglioma	Ganglioglioma	Low-grade astrocytic tumor	1	Discovery	GNG, MYB/MYBL1
+BS_H8A9PSYA	C121524	7316-495	RNA-Seq	low-grade glioma/astrocytoma (who grade i/ii)	low-grade glioma/astrocytoma	LGAT	Low-grade astrocytic tumor	1	Discovery	LGG, KIAA1549-BRAF
+BS_H9EX5WX3	C2466519	7316-6032	RNA-Seq	low-grade glioma/astrocytoma (who grade i/ii)	low-grade glioma/astrocytoma	LGAT	Low-grade astrocytic tumor	1	Replicate	LGG, KIAA1549-BRAF
+BS_HK9P0Q4G	C1060998	7316-4349	RNA-Seq	low-grade glioma/astrocytoma (who grade i/ii)	low-grade glioma/astrocytoma	LGAT	Low-grade astrocytic tumor	3	Discovery	LGG, wildtype
+BS_HQ5BJ6MW	C46371	7316-134	RNA-Seq	low-grade glioma/astrocytoma (who grade i/ii)	low-grade glioma/astrocytoma	LGAT	Low-grade astrocytic tumor	1	Replicate	LGG, KIAA1549-BRAF
+BS_HSPV8GXC	C377733	7316-2979	RNA-Seq	low-grade glioma/astrocytoma (who grade i/ii)	low-grade glioma/astrocytoma	LGAT	Low-grade astrocytic tumor	1	Discovery	LGG_NF1
+BS_HV8PFRBR	C38991	7316-175	RNA-Seq	low-grade glioma/astrocytoma (who grade i/ii)	low-grade glioma/astrocytoma	LGAT	Low-grade astrocytic tumor	1	Discovery	LGG, KIAA1549-BRAF
+BS_J5H5VXWY	C1264686	7316-5146	RNA-Seq	low-grade glioma/astrocytoma (who grade i/ii)	low-grade glioma/astrocytoma	LGAT	Low-grade astrocytic tumor	2	Discovery	LGG_CDKN2A/B
+BS_JGKZ54SA	C1198881	7316-4738	RNA-Seq	low-grade glioma/astrocytoma (who grade i/ii)	low-grade glioma/astrocytoma	LGAT	Low-grade astrocytic tumor	1	Discovery	LGG, wildtype
+BS_JKXA3FQC	C23493	7316-50	RNA-Seq	low-grade glioma/astrocytoma (who grade i/ii)	low-grade glioma/astrocytoma	LGAT	Low-grade astrocytic tumor	2	Discovery	LGG, other MAPK
+BS_JVA2NQFF	C916719	7316-3566	RNA-Seq	low-grade glioma/astrocytoma (who grade i/ii)	low-grade glioma/astrocytoma	LGAT	Low-grade astrocytic tumor	3	Discovery	LGG, KIAA1549-BRAF
+BS_JWSR581E	C736401	7316-2729	RNA-Seq	low-grade glioma/astrocytoma (who grade i/ii)	low-grade glioma/astrocytoma	LGAT	Low-grade astrocytic tumor	1	Discovery	LGG, KIAA1549-BRAF
+BS_K2VYFVKZ	C75276	7316-462	RNA-Seq	low-grade glioma/astrocytoma (who grade i/ii)	low-grade glioma/astrocytoma	LGAT	Low-grade astrocytic tumor	1	Replicate	LGG, KIAA1549-BRAF
+BS_K5802F84	C244032	7316-923	RNA-Seq	low-grade glioma/astrocytoma (who grade i/ii)	low-grade glioma/astrocytoma	LGAT	Low-grade astrocytic tumor	2	Discovery	LGG, other MAPK
+BS_K838XW6V	C2421501	7316-5258	RNA-Seq	low-grade glioma/astrocytoma (who grade i/ii)	low-grade glioma/astrocytoma	LGAT	Low-grade astrocytic tumor	1	Discovery	LGG, wildtype
+BS_M4TTKPNR	C90528	7316-441	RNA-Seq	low-grade glioma/astrocytoma (who grade i/ii)	low-grade glioma/astrocytoma	LGAT	Low-grade astrocytic tumor	1	Discovery	LGG, KIAA1549-BRAF
+BS_M8WP5T16	C90159	7316-2989	RNA-Seq	low-grade glioma/astrocytoma (who grade i/ii)	low-grade glioma/astrocytoma	LGAT	Low-grade astrocytic tumor	3	Discovery	LGG_RTK
+BS_MF9X3PKH	C663093	7316-2572	RNA-Seq	low-grade glioma/astrocytoma (who grade i/ii)	low-grade glioma/astrocytoma	LGAT	Low-grade astrocytic tumor	1	Discovery	LGG, KIAA1549-BRAF
+BS_N1E0H8YQ	C230871	7316-891	RNA-Seq	low-grade glioma/astrocytoma (who grade i/ii)	low-grade glioma/astrocytoma	LGAT	Low-grade astrocytic tumor	1	Discovery	LGG, KIAA1549-BRAF
+BS_N210XMKR	C127182	7316-869	RNA-Seq	low-grade glioma/astrocytoma (who grade i/ii)	low-grade glioma/astrocytoma	LGAT	Low-grade astrocytic tumor	1	Discovery	LGG, KIAA1549-BRAF
+BS_N87X1T8T	C1032462	7316-3962	RNA-Seq	low-grade glioma/astrocytoma (who grade i/ii)	low-grade glioma/astrocytoma	LGAT	Low-grade astrocytic tumor	1	Discovery	LGG, KIAA1549-BRAF
+BS_NQB91P48	C46617	7316-127	RNA-Seq	low-grade glioma/astrocytoma (who grade i/ii)	low-grade glioma/astrocytoma	LGAT	Low-grade astrocytic tumor	3	Discovery	LGG, KIAA1549-BRAF
+BS_NRFQEQKP	C22509	7316-20	RNA-Seq	low-grade glioma/astrocytoma (who grade i/ii)	low-grade glioma/astrocytoma	LGAT	Low-grade astrocytic tumor	2	Discovery	LGG, KIAA1549-BRAF
+BS_NRPG5K4K	C88683	7316-2744	RNA-Seq	low-grade glioma/astrocytoma (who grade i/ii)	low-grade glioma/astrocytoma	LGAT	Low-grade astrocytic tumor	1	Discovery	LGG, KIAA1549-BRAF
+BS_NT9NZYFD	C907371	7316-3572	RNA-Seq	ganglioglioma	ganglioglioma	Ganglioglioma	Low-grade astrocytic tumor	3	Discovery	GNG, KIAA1549-BRAF
+BS_NYS8TRCB	C19680	7316-397	RNA-Seq	low-grade glioma/astrocytoma (who grade i/ii)	low-grade glioma/astrocytoma	LGAT	Low-grade astrocytic tumor	3	Discovery	LGG, wildtype
+BS_P2Y2NANM	C2760858	7316-6778	RNA-Seq	low-grade glioma/astrocytoma (who grade i/ii)	low-grade glioma/astrocytoma	LGAT	Low-grade astrocytic tumor	1	Discovery	LGG, KIAA1549-BRAF
+BS_PCG8YM9B	C2334786	7316-5279	RNA-Seq	low-grade glioma/astrocytoma (who grade i/ii)	low-grade glioma/astrocytoma	LGAT	Low-grade astrocytic tumor	1	Discovery	LGG, wildtype
+BS_PEP9NZXN	C744888	7316-2755	RNA-Seq	low-grade glioma/astrocytoma (who grade i/ii)	low-grade glioma/astrocytoma	LGAT	Low-grade astrocytic tumor	2	Replicate	LGG, KIAA1549-BRAF
+BS_PK18H7E7	C77613	7316-399	RNA-Seq	low-grade glioma/astrocytoma (who grade i/ii)	low-grade glioma/astrocytoma	LGAT	Low-grade astrocytic tumor	3	Discovery	LGG_RTK
+BS_PKW05VZV	C17712	7316-325	RNA-Seq	ganglioglioma	ganglioglioma	Ganglioglioma	Low-grade astrocytic tumor	1	Discovery	GNG, wildtype
+BS_PN2CE34A	C713892	7316-2591	RNA-Seq	low-grade glioma/astrocytoma (who grade i/ii)	low-grade glioma/astrocytoma	LGAT	Low-grade astrocytic tumor	3	Discovery	LGG, wildtype
+BS_PPDY6WEN	C2479803	7316-6667	RNA-Seq	low-grade glioma/astrocytoma (who grade i/ii)	low-grade glioma/astrocytoma	LGAT	Low-grade astrocytic tumor	2	Discovery	LGG_CDKN2A/B
+BS_PQ7CQFYR	C186714	7316-905	RNA-Seq	ganglioglioma	ganglioglioma	Ganglioglioma	Low-grade astrocytic tumor	2	Replicate	GNG, KIAA1549-BRAF
+BS_Q7WNW1AS	C41082	7316-237	RNA-Seq	low-grade glioma/astrocytoma (who grade i/ii)	low-grade glioma/astrocytoma	LGAT	Low-grade astrocytic tumor	2	Discovery	LGG, wildtype
+BS_Q9XPE1Z8	C857679	7316-3302	RNA-Seq	low-grade glioma/astrocytoma (who grade i/ii)	low-grade glioma/astrocytoma	LGAT	Low-grade astrocytic tumor	1	Discovery	LGG, wildtype
+BS_QH82PBMB	C68388	7316-222	RNA-Seq	low-grade glioma/astrocytoma (who grade i/ii)	low-grade glioma/astrocytoma	LGAT	Low-grade astrocytic tumor	1	Replicate	LGG, KIAA1549-BRAF
+BS_QV51J756	C23862	7316-101	RNA-Seq	ganglioglioma	ganglioglioma	Ganglioglioma	Low-grade astrocytic tumor	3	Discovery	GNG, other MAPK
+BS_R13X6TMW	C806019	7316-2589	RNA-Seq	low-grade glioma/astrocytoma (who grade i/ii)	low-grade glioma/astrocytoma	LGAT	Low-grade astrocytic tumor	3	Replicate	LGG, KIAA1549-BRAF
+BS_RARBBY7C	C1199004	7316-4742	RNA-Seq	low-grade glioma/astrocytoma (who grade i/ii)	low-grade glioma/astrocytoma	LGAT	Low-grade astrocytic tumor	1	Discovery	LGG, KIAA1549-BRAF
+BS_RMT7ABN6	C2409078	7316-5334	RNA-Seq	low-grade glioma/astrocytoma (who grade i/ii)	low-grade glioma/astrocytoma	LGAT	Low-grade astrocytic tumor	1	Discovery	LGG, wildtype
+BS_RRAEQZ97	C58056	7316-207	RNA-Seq	low-grade glioma/astrocytoma (who grade i/ii)	low-grade glioma/astrocytoma	LGAT	Low-grade astrocytic tumor	3	Discovery	LGG_RTK
+BS_S1KK7XRH	C311559	7316-938	RNA-Seq	low-grade glioma/astrocytoma (who grade i/ii)	low-grade glioma/astrocytoma	LGAT	Low-grade astrocytic tumor	1	Discovery	LGG, KIAA1549-BRAF
+BS_S7CZY2CH	C83640	7316-381	RNA-Seq	low-grade glioma/astrocytoma (who grade i/ii)	low-grade glioma/astrocytoma	LGAT	Low-grade astrocytic tumor	2	Discovery	LGG_RTK
+BS_SDZY6RZ3	C37638	7316-168	RNA-Seq	low-grade glioma/astrocytoma (who grade i/ii)	low-grade glioma/astrocytoma	LGAT	Low-grade astrocytic tumor	1	Discovery	LGG, KIAA1549-BRAF
+BS_SFKZSJN1	C28659	7316-84	RNA-Seq	low-grade glioma/astrocytoma (who grade i/ii)	low-grade glioma/astrocytoma	LGAT	Low-grade astrocytic tumor	2	Replicate	LGG, KIAA1549-BRAF
+BS_SHMC4902	C78966	7316-400	RNA-Seq	low-grade glioma/astrocytoma (who grade i/ii)	low-grade glioma/astrocytoma	LGAT	Low-grade astrocytic tumor	1	Discovery	LGG, KIAA1549-BRAF
+BS_SQX5E15Z	C735540	7316-2725	RNA-Seq	low-grade glioma/astrocytoma (who grade i/ii)	low-grade glioma/astrocytoma	LGAT	Low-grade astrocytic tumor	3	Discovery	LGG, BRAF V600E
+BS_T1N7GQVR	C2697882	7316-6670	RNA-Seq	low-grade glioma/astrocytoma (who grade i/ii)	low-grade glioma/astrocytoma	LGAT	Low-grade astrocytic tumor	1	Discovery	LGG, BRAF V600E
+BS_T1W4JA94	C18204	7316-297	RNA-Seq	low-grade glioma/astrocytoma (who grade i/ii)	low-grade glioma/astrocytoma	LGAT	Low-grade astrocytic tumor	3	Replicate	LGG, KIAA1549-BRAF
+BS_T3CA1429	C2439951	7316-5261	RNA-Seq	low-grade glioma/astrocytoma (who grade i/ii)	low-grade glioma/astrocytoma	LGAT	Low-grade astrocytic tumor	3	Discovery	LGG, wildtype
+BS_T5P5ME9M	C1277724	7316-5152	RNA-Seq	low-grade glioma/astrocytoma (who grade i/ii)	low-grade glioma/astrocytoma	LGAT	Low-grade astrocytic tumor	3	Discovery	LGG, KIAA1549-BRAF
+BS_V036JAV6	C883755	7316-3561	RNA-Seq	low-grade glioma/astrocytoma (who grade i/ii)	low-grade glioma/astrocytoma	LGAT	Low-grade astrocytic tumor	1	Discovery	LGG, KIAA1549-BRAF
+BS_V72GX2AZ	C96186	7316-472	RNA-Seq	low-grade glioma/astrocytoma (who grade i/ii)	low-grade glioma/astrocytoma	LGAT	Low-grade astrocytic tumor	3	Discovery	LGG, KIAA1549-BRAF
+BS_V7BJM89K	C66420	7316-217	RNA-Seq	low-grade glioma/astrocytoma (who grade i/ii)	low-grade glioma/astrocytoma	LGAT	Low-grade astrocytic tumor	3	Discovery	LGG_NF1
+BS_V7BZ049H	C2421747	7316-5336	RNA-Seq	low-grade glioma/astrocytoma (who grade i/ii)	low-grade glioma/astrocytoma	LGAT	Low-grade astrocytic tumor	2	Replicate	LGG, KIAA1549-BRAF
+BS_VP3C8WZT	C88683	7316-391	RNA-Seq	low-grade glioma/astrocytoma (who grade i/ii)	low-grade glioma/astrocytoma	LGAT	Low-grade astrocytic tumor	1	Discovery	LGG, KIAA1549-BRAF
+BS_VSH7SNSQ	C883755	7316-3561	RNA-Seq	low-grade glioma/astrocytoma (who grade i/ii)	low-grade glioma/astrocytoma	LGAT	Low-grade astrocytic tumor	1	Discovery	LGG, KIAA1549-BRAF
+BS_VTYNWK05	C1046730	7316-6354	RNA-Seq	low-grade glioma/astrocytoma (who grade i/ii)	low-grade glioma/astrocytoma	LGAT	Low-grade astrocytic tumor	1	Discovery	LGG, BRAF V600E
+BS_VW85Q4XJ	C77613	7316-2962	RNA-Seq	low-grade glioma/astrocytoma (who grade i/ii)	low-grade glioma/astrocytoma	LGAT	Low-grade astrocytic tumor	3	Discovery	LGG_RTK
+BS_WCRKYV0T	C37269	7316-152	RNA-Seq	low-grade glioma/astrocytoma (who grade i/ii)	low-grade glioma/astrocytoma	LGAT	Low-grade astrocytic tumor	3	Discovery	LGG, wildtype
+BS_WG203ECV	C88683	7316-896	RNA-Seq	low-grade glioma/astrocytoma (who grade i/ii)	low-grade glioma/astrocytoma	LGAT	Low-grade astrocytic tumor	1	Discovery	LGG, KIAA1549-BRAF
+BS_WYMX429C	C1031970	7316-4208	RNA-Seq	low-grade glioma/astrocytoma (who grade i/ii)	low-grade glioma/astrocytoma	LGAT	Low-grade astrocytic tumor	1	Replicate	LGG, other MAPK
+BS_X2EDW2ZB	C2819652	7316-7059	RNA-Seq	ganglioglioma	ganglioglioma	Ganglioglioma	Low-grade astrocytic tumor	2	Discovery	GNG, wildtype
+BS_X59HSFGG	C393477	7316-1767	RNA-Seq	low-grade glioma/astrocytoma (who grade i/ii)	low-grade glioma/astrocytoma	LGAT	Low-grade astrocytic tumor	1	Replicate	LGG_NF1
+BS_X6GFVDVA	C3418785	7316-7932	RNA-Seq	low-grade glioma/astrocytoma (who grade i/ii)	low-grade glioma/astrocytoma	LGAT	Low-grade astrocytic tumor	1	Discovery	LGG, wildtype
+BS_XGSA3GQE	C818688	7316-3062	RNA-Seq	low-grade glioma/astrocytoma (who grade i/ii)	low-grade glioma/astrocytoma	LGAT	Low-grade astrocytic tumor	1	Discovery	LGG, KIAA1549-BRAF
+BS_XKKB4MZV	C52521	7316-262	RNA-Seq	low-grade glioma/astrocytoma (who grade i/ii)	low-grade glioma/astrocytoma	LGAT	Low-grade astrocytic tumor	1	Discovery	LGG, KIAA1549-BRAF
+BS_Y7F9E2E9	C720165	7316-2723	RNA-Seq	low-grade glioma/astrocytoma (who grade i/ii)	low-grade glioma/astrocytoma	LGAT	Low-grade astrocytic tumor	1	Discovery	LGG, wildtype
+BS_YASWHXJC	C1248081	7316-4919	RNA-Seq	low-grade glioma/astrocytoma (who grade i/ii)	low-grade glioma/astrocytoma	LGAT	Low-grade astrocytic tumor	1	Discovery	LGG_NF1
+BS_YMAJC22S	C53505	7316-2753	RNA-Seq	low-grade glioma/astrocytoma (who grade i/ii)	low-grade glioma/astrocytoma	LGAT	Low-grade astrocytic tumor	2	Discovery	LGG_RTK
+BS_YVEEXAAT	C2688165	7316-6663	RNA-Seq	low-grade glioma/astrocytoma (who grade i/ii)	low-grade glioma/astrocytoma	LGAT	Low-grade astrocytic tumor	1	Discovery	LGG, wildtype
+BS_YVMEEBKC	C808110	7316-3055	RNA-Seq	low-grade glioma/astrocytoma (who grade i/ii)	low-grade glioma/astrocytoma	LGAT	Low-grade astrocytic tumor	3	Discovery	LGG, KIAA1549-BRAF
+BS_YY5B2XDD	C98154	7316-460	RNA-Seq	low-grade glioma/astrocytoma (who grade i/ii)	low-grade glioma/astrocytoma	LGAT	Low-grade astrocytic tumor	1	Discovery	LGG, KIAA1549-BRAF
+BS_YZ2Z1Q6Y	C829512	7316-3068	RNA-Seq	low-grade glioma/astrocytoma (who grade i/ii)	low-grade glioma/astrocytoma	LGAT	Low-grade astrocytic tumor	1	Replicate	LGG, KIAA1549-BRAF
+BS_Z0AVVB1V	C35916	7316-146	RNA-Seq	low-grade glioma/astrocytoma (who grade i/ii)	low-grade glioma/astrocytoma	LGAT	Low-grade astrocytic tumor	1	Discovery	LGG, KIAA1549-BRAF
+BS_ZHRGDRBW	C3860478	7316-9447	RNA-Seq	ganglioglioma	ganglioglioma	Ganglioglioma	Low-grade astrocytic tumor	3	Discovery	LGG, BRAF V600E
+BS_ZJY7Y34M	C3615216	7316-8833	RNA-Seq	ganglioglioma	ganglioglioma	Ganglioglioma	Low-grade astrocytic tumor	3	Discovery	LGG, BRAF V600E
+BS_ZRM0W01M	C136284	7316-470	RNA-Seq	low-grade glioma/astrocytoma (who grade i/ii)	low-grade glioma/astrocytoma	LGAT	Low-grade astrocytic tumor	3	Discovery	LGG, wildtype
+BS_ZTWGFWTX	C808233	7316-3054	RNA-Seq	low-grade glioma/astrocytoma (who grade i/ii)	low-grade glioma/astrocytoma	LGAT	Low-grade astrocytic tumor	3	Discovery	LGG, KIAA1549-BRAF
