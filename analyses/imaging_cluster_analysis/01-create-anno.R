@@ -39,6 +39,12 @@ histology_file <- histology_file %>%
          cohort_participant_id %in% lgg_clusters$SubjectID) %>%
   dplyr::select(Kids_First_Biospecimen_ID, cohort_participant_id, sample_id, experimental_strategy, pathology_diagnosis, cancer_group, short_histology, broad_histology, molecular_subtype)
 
+# only use samples with actual RNA-seq data 
+count_mat = file.path(data_dir, "20230826_release-gene-counts-rsem-expected_count.collapsed.rds")
+count_mat <- readRDS(count_mat)
+histology_file <- histology_file %>%
+  filter(Kids_First_Biospecimen_ID %in% colnames(count_mat))
+
 # combine both 
 lgg_cluster_file <- histology_file %>%
   inner_join(lgg_clusters, by = c("cohort_participant_id" = "SubjectID")) %>%

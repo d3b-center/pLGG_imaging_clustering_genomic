@@ -8,16 +8,16 @@
   LGG_CDKN2A/B           0  3  1
   LGG_IDH                0  1  0
   LGG_NF1                3  1  4
-  LGG_RTK                3  7  3
-  LGG, BRAF V600E        3  2 10
+  LGG_RTK                2  6  3
+  LGG, BRAF V600E        2  2 10
   LGG, KIAA1549-BRAF    41  9 18
   LGG, MYB/MYBL1         0  1  0
   LGG, other MAPK        3  3  5
   LGG, To be classified  0  0  1
-  LGG, wildtype         12  4  9
+  LGG, wildtype          9  2  8
 
 	Pearson's Chi-squared test
 
 data:  cohort_level$molecular_subtype and cohort_level$cluster_assigned
-X-squared = 51.719, df = 28, p-value = 0.004132
+X-squared = 54.236, df = 28, p-value = 0.002098
 

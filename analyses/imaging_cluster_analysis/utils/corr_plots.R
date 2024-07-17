@@ -13,8 +13,8 @@ corr_plots <- function(lgg_cluster_file, prefix){
   # generate balloon plot of rows with at least 3 samples in a group
   dat <- cohort_level %>%
     filter(!is.na(molecular_subtype)) %>%
-    group_by(molecular_subtype, cluster_assigned)  %>%
-    summarise(n = n()) %>%
+    dplyr::group_by(molecular_subtype, cluster_assigned)  %>%
+    dplyr::summarise(n = n()) %>%
     # mutate(nmax = max(n)) %>%
     # filter(nmax >= 3) %>%
     # ungroup() %>%
