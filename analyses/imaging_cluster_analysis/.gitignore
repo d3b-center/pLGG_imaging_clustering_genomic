@@ -1,0 +1,5 @@
+Rplots.pdf
+**/ccp_output/*.rds
+**/ccp_output/*.pdf
+!**/ccp_output/*corrplot.pdf
+!**/ccp_output/*balloonplot.pdf
