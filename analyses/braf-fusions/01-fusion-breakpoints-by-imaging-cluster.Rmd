@@ -162,26 +162,6 @@ write_tsv(type_df,
           file.path(results_dir, "lgg-braf-fusion-common-breakpoint-type-image-clusters.tsv"))
 
 ```
-Generate enrichment heatmap of breakpoint types (common vs. rare) in imaging clusters
-
-```{r cluster-breakpoint type heatmap}
-plot_df <- imaging_plus_fusions %>%
-  dplyr::filter(!is.na(breakpoint_type)) %>%
-  dplyr::mutate(`Cluster Assignment` = glue::glue("cluster{`Cluster Assignment`}"))
-
-breakpoint_type_ht <- plot_enr(plot_df, "breakpoint_type", "Cluster Assignment",
-                     var1_names = c("common", "rare"),
-                     var2_names = c("cluster1", "cluster2", "cluster3"),
-                     padjust = FALSE)
-
-pdf(file.path(plot_dir, "breakpoint-type-by-cluster-ht.pdf"),
-    width = 4, height = 2.5)
-
-draw(breakpoint_type_ht)
-
-dev.off()
-```
-
 
 Generate enrichment heatmap of breakpoint groups in imaging clusters
 
@@ -203,6 +183,31 @@ draw(breakpoint_group_ht)
 dev.off()
 ```
 
+Plot distribution of breakpoint type (common vs. rare) across clusters
+
+```{r}
+cluster_breakpoint_type_ct <- table(plot_df$breakpoint_type, plot_df$`Cluster Assignment`)
+
+col_fun = colorRamp2(c(0, ceiling(max(cluster_breakpoint_type_ct))), c("white", "orangered"))
+
+pdf(file.path(plot_dir, "breakpoint-type-by-cluster-ht.pdf"),
+    width = 3, height = 2)
+
+Heatmap(cluster_breakpoint_type_ct,
+       name = "Count",
+       cluster_rows = F,
+       cluster_columns = F,
+       rect_gp = gpar(col = "black", lwd = 2),
+       col = col_fun,
+       cell_fun = function(j, i, x, y, width, height, fill) {
+         grid.text(sprintf("%s", cluster_breakpoint_type_ct[i, j]), x, y, gp = gpar(fontsize = 12))
+       },
+       column_names_side = "top",
+       column_names_rot = 25,
+       column_names_centered = FALSE)
+
+dev.off()
+```
 
 Assess distribution of breakpoint type by imaging cluster (common vs. rare)
 
