@@ -53,19 +53,27 @@ perform_enrichment_gsea <- function(diffexpr_res, pathways, prefix, plots_dir, r
   # generate plots
   if(nrow(top10_output) > 0){
     # barplot
-    pdf(file = file.path(plots_dir, paste0(prefix, "_gsea_barplot.pdf")), width = 8, height = 8)
+    print(prefix)
+    if(prefix == "cluster2_vs_cluster3"){
+      height = 8
+    } else {
+      height = 10
+    }
+    pdf(file = file.path(plots_dir, paste0(prefix, "_gsea_barplot.pdf")), width = 10, height = height)
     top10_output$ID <- factor(top10_output$ID, levels = unique(top10_output$ID))
     top10_output$direction <- factor(top10_output$direction, levels = c("Up", "Down"))
-    
+    title <- gsub("_", " ", prefix)
+    title <- gsub("cluster", "Cluster ", title)
     p <- ggplot(top10_output, aes(ID, y = (-1)*log10(p.adjust), fill = direction)) + 
       geom_bar(stat="identity") + coord_flip() + theme_bw() +
       xlab("") + 
       ylab("-log10 Adj. P-Value") + 
       scale_fill_manual(name = "Direction", values = c("Down" = "forest green", "Up" = "red")) +
-      scale_x_discrete(labels = function(x) str_wrap(x, width = 40)) +
+      scale_x_discrete(labels = function(x) str_wrap(x, width = 50)) +
       theme(plot.margin = unit(c(1, 1, 1, 1), "cm")) + 
-      ggpubr::theme_pubr(base_size = 8) + 
-      ggtitle("Top 10 Upregulated/Downregulated Pathways")
+      ggpubr::theme_pubr(base_size = 12) + theme(title = element_text(face = "bold"), 
+                                                 axis.text.y = element_text(face = "bold")) + 
+      ggtitle(paste0("Imaging ", title ,"\n","Top 10 Up-/Down-regulated Pathways"))
     print(p)
     dev.off()
   }
