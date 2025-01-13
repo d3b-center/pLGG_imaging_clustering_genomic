@@ -57,9 +57,9 @@ perform_enrichment_gsea <- function(diffexpr_res, pathways, prefix, plots_dir, r
     if(prefix == "cluster2_vs_cluster3"){
       height = 8
     } else {
-      height = 10
+      height = 11
     }
-    pdf(file = file.path(plots_dir, paste0(prefix, "_gsea_barplot.pdf")), width = 10, height = height)
+    pdf(file = file.path(plots_dir, paste0(prefix, "_gsea_barplot.pdf")), width = 11, height = height)
     top10_output$ID <- factor(top10_output$ID, levels = unique(top10_output$ID))
     top10_output$direction <- factor(top10_output$direction, levels = c("Up", "Down"))
     title <- gsub("_", " ", prefix)
@@ -68,11 +68,10 @@ perform_enrichment_gsea <- function(diffexpr_res, pathways, prefix, plots_dir, r
       geom_bar(stat="identity") + coord_flip() + theme_bw() +
       xlab("") + 
       ylab("-log10 Adj. P-Value") + 
-      scale_fill_manual(name = "Direction", values = c("Down" = "forest green", "Up" = "red")) +
+      scale_fill_manual(name = "Direction", values = c("Down" = "#007d3c", "Up" = "#FF6962")) +
       scale_x_discrete(labels = function(x) str_wrap(x, width = 50)) +
       theme(plot.margin = unit(c(1, 1, 1, 1), "cm")) + 
-      ggpubr::theme_pubr(base_size = 14)
-                                                 axis.text.y = element_text(face = "bold")) + 
+      ggpubr::theme_pubr(base_size = 14) + 
       ggtitle(paste0("Imaging ", title ,"\n","Top 10 Up-/Down-regulated Pathways"))
     print(p)
     dev.off()
