@@ -30,16 +30,14 @@ analysis_dir <- file.path(root_dir, "analyses", "imaging_cluster_analysis")
 # output directory
 output_dir <-
   file.path(analysis_dir, "results", "imaging_cluster_prediction")
-gbm_output_dir <- file.path(output_dir, "gbm")
-dir.create(gbm_output_dir,
+dir.create(output_dir,
            showWarnings = F,
            recursive = T)
 
 # plots dirs
-plots_dir <-
+plot_dir <-
   file.path(analysis_dir, "plots", "imaging_cluster_prediction")
-gbm_plots_dir <- file.path(plots_dir, "gbm")
-dir.create(gbm_plots_dir, showWarnings = F, recursive = T)
+dir.create(plot_dir, showWarnings = F, recursive = T)
 
 # read histology file
 histology_file <-
@@ -382,8 +380,8 @@ for (i in 1:length(formulas)) {
     c('probabilities', 'observed_labels', 'group')
   
   pdf(file = file.path(
-    gbm_plots_dir,
-    paste0('gbm_roc_curves_', responses[i], '.pdf')
+    plot_dir,
+    paste0('glm_roc_curves_', responses[i], '.pdf')
   ),
   onefile = TRUE)
   
