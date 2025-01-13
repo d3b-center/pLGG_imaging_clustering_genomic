@@ -68,7 +68,7 @@ perform_enrichment_gsea <- function(diffexpr_res, pathways, prefix, plots_dir, r
       geom_bar(stat="identity") + coord_flip() + theme_bw() +
       xlab("") + 
       ylab("-log10 Adj. P-Value") + 
-      scale_fill_manual(name = "Direction", values = c("Down" = "#007d3c", "Up" = "#FF6962")) +
+      scale_fill_manual(name = "Direction", values = c("Down" = "skyblue3", "Up" = "lightcoral")) +
       scale_x_discrete(labels = function(x) str_wrap(x, width = 50)) +
       theme(plot.margin = unit(c(1, 1, 1, 1), "cm")) + 
       ggpubr::theme_pubr(base_size = 14) + 
