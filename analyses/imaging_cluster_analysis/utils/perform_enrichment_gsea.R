@@ -71,7 +71,7 @@ perform_enrichment_gsea <- function(diffexpr_res, pathways, prefix, plots_dir, r
       scale_fill_manual(name = "Direction", values = c("Down" = "forest green", "Up" = "red")) +
       scale_x_discrete(labels = function(x) str_wrap(x, width = 50)) +
       theme(plot.margin = unit(c(1, 1, 1, 1), "cm")) + 
-      ggpubr::theme_pubr(base_size = 12) + theme(title = element_text(face = "bold"), 
+      ggpubr::theme_pubr(base_size = 14)
                                                  axis.text.y = element_text(face = "bold")) + 
       ggtitle(paste0("Imaging ", title ,"\n","Top 10 Up-/Down-regulated Pathways"))
     print(p)
