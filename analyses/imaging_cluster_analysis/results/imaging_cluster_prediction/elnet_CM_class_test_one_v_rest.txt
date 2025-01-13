@@ -1,0 +1,11 @@
+Sensitivity	0.45
+Specificity	0.740740740740741
+Pos Pred Value	0.5625
+Neg Pred Value	0.645161290322581
+Precision	0.5625
+Recall	0.45
+F1	0.5
+Prevalence	0.425531914893617
+Detection Rate	0.191489361702128
+Detection Prevalence	0.340425531914894
+Balanced Accuracy	0.59537037037037

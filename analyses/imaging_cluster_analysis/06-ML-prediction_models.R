@@ -160,6 +160,7 @@ pathway_names <-
     "is_cluster3",
     covariates
   )]
+
 train_formula <-
   paste0("cluster_assignment ~ ", paste(c(pathway_names, covariates), collapse = " + "))
 formulas <- list(
@@ -179,42 +180,165 @@ formulas <- list(
 
 responses <- c('is_cluster1', 'is_cluster2', 'is_cluster3')
 
-# GBMboost
-train_data <- train_data %>%
-  dplyr::mutate(
-    is_cluster1 = case_when(is_cluster1 == 'rest' ~ 0,
-                            .default = 1),
-    is_cluster2 = case_when(is_cluster2 == 'rest' ~ 0,
-                            .default = 1),
-    is_cluster3 = case_when(is_cluster3 == 'rest' ~ 0,
-                            .default = 1)
-  )
+get_best_result <- function(caret_fit) {
+  best <-
+    which(rownames(caret_fit$results) == rownames(caret_fit$bestTune))
+  best_result <- caret_fit$results[best,]
+  rownames(best_result) <- NULL
+  best_result
+}
 
-test_data <- test_data %>%
-  dplyr::mutate(
-    is_cluster1 = case_when(is_cluster1 == 'rest' ~ 0,
-                            .default = 1),
-    is_cluster2 = case_when(is_cluster2 == 'rest' ~ 0,
-                            .default = 1),
-    is_cluster3 = case_when(is_cluster3 == 'rest' ~ 0,
-                            .default = 1)
-  )
 
 for (i in 1:length(formulas)) {
   foi <- formulas[[i]]
-  gbm_fit <-
-    gbm(
-      formula = as.formula(foi),
-      data = as.data.frame(train_data),
-      distribution = 'bernoulli',
-      n.trees = 500,
-      cv.folds = 10
-    )
+  ctr_cv <-
+    caret::trainControl(method = "cv",
+                        allowParallel = TRUE,
+                        number = 10)
   
-  # Train and test ROC_AUC
+  # Elastic net log reg
+  fit_glmnet <- caret::train(
+    form = as.formula(foi),
+    data = as.data.frame(train_data),
+    method = "glmnet",
+    trControl = ctr_cv,
+    tuneLength = 50,
+    search = 'random'
+  )
+  
+  ### write out accuracy metrics and tuning plots
+  best_result <- get_best_result(fit_glmnet)
+  fwrite(best_result,
+         file = file.path(
+           output_dir,
+           paste0('elnet_estimated_test_err_cv_', names(formulas)[i], '.txt')
+         ),
+         sep = '\t')
+  
+  p <- ggplot(data = fit_glmnet) +
+    theme(legend.position = "none") +
+    theme_classic()
+  ggsave(
+    filename = file.path(plot_dir, paste0(
+      'elnet_metrics_', names(formulas)[i], '.pdf'
+    )),
+    plot = p,
+    width = 15
+  )
+  
+  ### Predict on training data
+  train_predict <- fit_glmnet %>% predict(train_data)
+  confusion_mat <-
+    confusionMatrix(data = train_predict,
+                    reference = train_data[[responses[i]]],
+                    mode = "prec_recall")
+  confusion_mat_overall <- confusion_mat$overall
+  write.table(
+    confusion_mat_overall,
+    file = file.path(
+      output_dir,
+      paste0("elnet_CM_overall_train_", names(formulas)[i], ".txt")
+    ),
+    sep = "\t",
+    quote = FALSE,
+    col.names = FALSE
+  )
+  
+  confusion_mat_class <- confusion_mat$byClass
+  write.table(
+    confusion_mat_class,
+    file = file.path(
+      output_dir,
+      paste0("elnet_CM_class_train_", names(formulas)[i], ".txt")
+    ),
+    sep = "\t",
+    quote = FALSE,
+    col.names = FALSE
+  )
+  
+  # Make predictions on the test data
+  test_predict <- fit_glmnet %>% predict(test_data)
+  confusion_mat <-
+    confusionMatrix(data = test_predict,
+                    reference = test_data[[responses[i]]],
+                    mode = "prec_recall")
+  confusion_mat_overall <- confusion_mat$overall
+  write.table(
+    confusion_mat_overall,
+    file = file.path(
+      output_dir,
+      paste0("elnet_CM_overall_test_", names(formulas)[i], ".txt")
+    ),
+    sep = "\t",
+    quote = FALSE,
+    col.names = FALSE
+  )
+  
+  confusion_mat_class <- confusion_mat$byClass
+  write.table(
+    confusion_mat_class,
+    file = file.path(
+      output_dir,
+      paste0("elnet_CM_class_test_", names(formulas)[i], ".txt")
+    ),
+    sep = "\t",
+    quote = FALSE,
+    col.names = FALSE
+  )
+  
+  # Important features
+  
+  # Print the random forest model summary
+  glm_features <- coef(fit_glmnet$finalModel, fit_glmnet$bestTune$lambda)
+  glm_features <- data.table('pathways' = glm_features@Dimnames[[1]][glm_features@i],
+                             'coefficients' = glm_features@x[2:length(glm_features@x)]) %>%
+    dplyr::arrange(desc(coefficients))
+  
+  write.table(
+    glm_features,
+    file = file.path(
+      output_dir,
+      paste0('elnet_full_feature_table_', names(formulas)[i], '.txt')
+    ),
+    sep = '\t',
+    quote = FALSE,
+    col.names = TRUE
+  )
+  
+  glm_features_up <- glm_features %>% 
+    dplyr::filter(coefficients > 0) %>%
+    dplyr::slice_head(n = 10)
+  
+  glm_features_down <- glm_features %>% 
+    dplyr::filter(coefficients < 0) %>%
+    dplyr::slice_tail(n = 10)
+  
+  glm_features_filt <- rbind(glm_features_up, glm_features_down)
+  
+  bar_plot <-
+    ggplot(glm_features_filt, aes(y = reorder(pathways, coefficients), x = coefficients)) +
+    geom_bar(stat = "identity", fill = colorRampPalette(brewer.pal(3, 'Blues'))(nrow(glm_features_filt))) +
+    labs(title = "Top Features by GLM Coefficient",
+         y = "Features",
+         x = "GLM Coefficient") +
+    theme_minimal() +
+    theme(axis.text.x = element_text(angle = 90, hjust = 1))
+  
+  # Save the plot as a PDF file in the "plots" directory
+  ggsave(
+    file.path(
+      plot_dir,
+      paste0("elnet_top_features_", names(formulas)[i], ".pdf")
+    ),
+    plot = bar_plot,
+    width = 10,
+    height = 6
+  )
+  
+  # Training and testing ROC_AUC
   train_predict <-
     predict(
-      gbm_fit,
+      fit_glmnet,
       newdata = dplyr::select(
         train_data,
         -cluster_assignment,
@@ -223,18 +347,18 @@ for (i in 1:length(formulas)) {
         -is_cluster2,
         -is_cluster3
       ),
-      type = 'response'
+      type = 'prob'
     )
   
-  train_predict <- as.data.frame(train_predict)
+  train_predict <- as.data.frame(train_predict) %>%
+    dplyr::select(-rest)
   train_predict <- train_predict %>%
     dplyr::mutate('observed_labels' = train_data[[responses[i]]],
-                  'group' = 'train') %>%
-    dplyr::rename('probabilities' = 'train_predict')
+                  'group' = 'train')
   
   test_predict <-
     predict(
-      gbm_fit,
+      fit_glmnet,
       newdata = dplyr::select(
         test_data,
         -cluster_assignment,
@@ -243,14 +367,19 @@ for (i in 1:length(formulas)) {
         -is_cluster2,
         -is_cluster3
       ),
-      type = 'response'
+      type = 'prob'
     )
   
-  test_predict <- as.data.frame(test_predict)
+  test_predict <- as.data.frame(test_predict) %>%
+    dplyr::select(-rest)
   test_predict <- test_predict %>%
     dplyr::mutate('observed_labels' = test_data[[responses[i]]],
-                  'group' = 'test') %>%
-    dplyr::rename('probabilities' = 'test_predict')
+                  'group' = 'test')
+  
+  colnames(train_predict) <-
+    c('probabilities', 'observed_labels', 'group')
+  colnames(test_predict) <-
+    c('probabilities', 'observed_labels', 'group')
   
   pdf(file = file.path(
     gbm_plots_dir,
@@ -288,45 +417,22 @@ for (i in 1:length(formulas)) {
   
   dev.off()
   
-  var_influence <-
-    relative.influence(gbm_fit, 500, scale. = FALSE, sort. = TRUE)
-  var_influence <-
-    data.table('variable' = names(var_influence),
-               'influence_score' = var_influence)
-  fwrite(var_influence,
-         file = file.path(gbm_output_dir, paste0(
-           'influence_score_', names(formulas)[i], '.txt'
-         )),
-         sep = '\t')
-  var_influence_sub <- var_influence %>%
-    slice_head(n = 20)
+  sink(file = file.path(output_dir, paste0('ci_auc_', responses[i], '.txt')))
   
-  bar_plot <-
-    ggplot(var_influence_sub,
-           aes(
-             y = reorder(
-               var_influence_sub$variable,
-               var_influence_sub$influence_score
-             ),
-             x = var_influence_sub$influence_score
-           )) +
-    geom_bar(stat = "identity", fill = colorRampPalette(brewer.pal(3, 'Blues'))(nrow(var_influence_sub))) +
-    labs(
-      title = paste0("Top 20 Features by Influence Score (", names(formulas)[i], ")"),
-      y = "",
-      x = "Influence Score"
-    ) +
-    theme_minimal() +
-    theme(axis.text.x = element_text(angle = 90, hjust = 1))
+  cat('Training: AUC Confidence Intervals \n')
+  ci.auc(roc(
+    train_predict$observed_labels,
+    train_predict$probabilities,
+    method = 'boostrap'
+  ))
   
-  # Save the plot as a PDF file in the "plots" directory
-  ggsave(
-    file.path(
-      gbm_plots_dir,
-      paste0("gbm_top_20_features_", names(formulas)[i], ".pdf")
-    ),
-    plot = bar_plot,
-    width = 15,
-    height = 6
-  )
+  cat('\n Testing: AUC Confidence Intervals \n')
+  
+  ci.auc(roc(
+    test_predict$observed_labels,
+    test_predict$probabilities,
+    method = 'bootstrap'
+  ))
+  
+  sink()
 }

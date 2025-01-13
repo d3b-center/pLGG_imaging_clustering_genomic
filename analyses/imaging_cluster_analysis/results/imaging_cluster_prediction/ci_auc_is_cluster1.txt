@@ -1,0 +1,5 @@
+Training: AUC Confidence Intervals 
+95% CI: 0.86-0.9635 (DeLong)
+
+ Testing: AUC Confidence Intervals 
+95% CI: 0.6503-0.9126 (DeLong)
