@@ -81,6 +81,7 @@ cluster_labels <- merge(histology_file,
 # read ssgsea_matrix file
 ssgsea_scores <-
   readRDS(file.path(analysis_dir, "results", "ssgsea_output", "ssgsea_matrix.rds")) %>% t() %>% as.data.frame()
+ssgsea_scores$REACTOME_REPRODUCTION <- NULL
 
 # remove zero variance or near zero variance predictors
 mads <- apply(ssgsea_scores, 2, mad)
@@ -155,6 +156,7 @@ pathway_names <-
     "is_cluster1",
     "is_cluster2",
     "is_cluster3",
+    'race',
     covariates
   )]
 
