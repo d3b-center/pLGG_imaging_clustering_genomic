@@ -54,6 +54,7 @@ histology_file <- histology_file %>%
     cohort_participant_id %in% lgg_clusters$SubjectID,
     experimental_strategy == "RNA-Seq"
   ) %>%
+  dplyr::mutate(race = ifelse(race == 'Reported Unknown', ethnicity, race)) %>%
   dplyr::select(
     cohort_participant_id,
     Kids_First_Biospecimen_ID,
@@ -146,7 +147,8 @@ covariates <- c(
   'molecular_subtype',
   'CNS_region',
   'reported_gender',
-  'age_at_diagnosis_days'
+  'age_at_diagnosis_days',
+  'race'
 )
 
 pathway_names <-
@@ -156,7 +158,6 @@ pathway_names <-
     "is_cluster1",
     "is_cluster2",
     "is_cluster3",
-    'race',
     covariates
   )]
 
@@ -316,12 +317,15 @@ for (i in 1:length(formulas)) {
   
   bar_plot <-
     ggplot(glm_features_filt, aes(y = reorder(pathways, coefficients), x = coefficients)) +
-    geom_bar(stat = "identity", fill = colorRampPalette(brewer.pal(3, 'Blues'))(nrow(glm_features_filt))) +
+    geom_bar(stat = "identity", fill = colorRampPalette(rev(brewer.pal(3, 'Blues')))(nrow(glm_features_filt))) +
     labs(title = "Top Features by GLM Coefficient",
          y = "Features",
          x = "GLM Coefficient") +
     theme_minimal() +
-    theme(axis.text.x = element_text(angle = 90, hjust = 1))
+    theme(axis.text.x = element_text(angle = 90, hjust = 1, size = 14),
+          axis.title.y = element_blank(),
+          axis.text.y = element_text(size = 14)) + 
+    labs(title = '')
   
   # Save the plot as a PDF file in the "plots" directory
   ggsave(
@@ -330,8 +334,8 @@ for (i in 1:length(formulas)) {
       paste0("elnet_top_features_", names(formulas)[i], ".pdf")
     ),
     plot = bar_plot,
-    width = 10,
-    height = 6
+    width = 15,
+    height = 9
   )
   
   # Training and testing ROC_AUC
