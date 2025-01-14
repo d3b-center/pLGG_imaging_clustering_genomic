@@ -145,7 +145,6 @@ covariates <- c(
   'molecular_subtype',
   'CNS_region',
   'reported_gender',
-  'race',
   'age_at_diagnosis_days'
 )
 
@@ -421,7 +420,7 @@ for (i in 1:length(formulas)) {
   ci.auc(roc(
     train_predict$observed_labels,
     train_predict$probabilities,
-    method = 'boostrap'
+    method = 'b'
   ))
   
   cat('\n Testing: AUC Confidence Intervals \n')
@@ -429,7 +428,7 @@ for (i in 1:length(formulas)) {
   ci.auc(roc(
     test_predict$observed_labels,
     test_predict$probabilities,
-    method = 'bootstrap'
+    method = 'b'
   ))
   
   sink()
