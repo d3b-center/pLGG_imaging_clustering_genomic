@@ -322,9 +322,9 @@ for (i in 1:length(formulas)) {
          y = "Features",
          x = "GLM Coefficient") +
     theme_minimal() +
-    theme(axis.text.x = element_text(angle = 90, hjust = 1, size = 14),
+    theme(axis.text.x = element_text(angle = 90, hjust = 1, size = 16),
           axis.title.y = element_blank(),
-          axis.text.y = element_text(size = 14)) + 
+          axis.text.y = element_text(size = 18)) + 
     labs(title = '')
   
   # Save the plot as a PDF file in the "plots" directory
